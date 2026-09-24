@@ -1117,10 +1117,11 @@
               <textarea id="textoCompromiso" required rows="3" placeholder="Ej: Reducir el consumo de plásticos y apoyar el comercio justo con nuestros pueblos originarios." class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm"></textarea>
             </div>
 
-            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-md shadow-emerald-700/20">
-              <i data-lucide="send" class="w-4 h-4"></i>
-              Publicar en el Stand
+            <button type="submit" id="btnPublicarCompromiso" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-md shadow-emerald-700/20 disabled:opacity-60 disabled:cursor-not-allowed">
+              <i data-lucide="send" id="btnPublicarIcono" class="w-4 h-4"></i>
+              <span id="btnPublicarTexto">Publicar en el Stand</span>
             </button>
+            <p id="estadoEnvioCompromiso" class="text-xs text-center font-medium mt-2 hidden"></p>
           </form>
         </div>
 
@@ -1128,7 +1129,13 @@
         <div class="lg:col-span-7">
           <div class="flex items-center justify-between mb-4">
             <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Reflexiones de los visitantes</span>
-            <span id="totalCompromisos" class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">4 compromisos</span>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="cargarCompromisos(true)" title="Actualizar compromisos en vivo" class="px-2.5 py-1 rounded-lg text-slate-500 hover:text-emerald-700 hover:bg-emerald-100/60 border border-slate-200 transition flex items-center gap-1.5 text-xs font-semibold">
+                <i data-lucide="refresh-cw" id="iconoRecargaCompromisos" class="w-3.5 h-3.5"></i>
+                <span>Actualizar</span>
+              </button>
+              <span id="totalCompromisos" class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">0 compromisos</span>
+            </div>
           </div>
 
           <div id="listaCompromisos" class="space-y-3 max-h-[380px] overflow-y-auto pr-2">

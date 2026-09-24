@@ -441,11 +441,88 @@ function iniciarTriviaStand() {
   }
 }
 
-function cargarCompromisos() {
-  const guardados = localStorage.getItem('stand_compromisos_amazonia');
-  const lista = guardados ? JSON.parse(guardados) : compromisosPorDefecto;
-  renderizarCompromisos(lista);
+// ========================================================
+// CONFIGURACIÓN DE GOOGLE SHEETS
+// Pegá aquí la URL de tu Web App de Google Apps Script:
+// Ejemplo: "https://script.google.com/macros/s/AKfycb.../exec"
+// ========================================================
+const GOOGLE_SHEETS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4vReOPvXzJgYa-RP-Da9Ezh0jK3HZTIkb1wL_0rXGFWl6LnHX52fn7vGn6KUH9kx-qw/exec";
+
+const compromisosPorDefecto = [
+  {
+    nombre: "Valentina M.",
+    fecha: "Reciente",
+    texto: "Reducir el consumo de plásticos de un solo uso y difundir la riqueza cultural de las comunidades originarias amazónicas."
+  },
+  {
+    nombre: "Prof. Marcos",
+    fecha: "Reciente",
+    texto: "Incorporar el concepto de Ecología Integral en mis clases para concientizar sobre el cuidado de nuestra Casa Común."
+  },
+  {
+    nombre: "Lucía y Tomás",
+    fecha: "Reciente",
+    texto: "Nos comprometemos a apoyar el consumo responsable y respetar la biodiversidad en nuestros hábitos diarios."
+  },
+  {
+    nombre: "Santiago G.",
+    fecha: "Reciente",
+    texto: "Reconocer que el grito de la tierra es también el grito de los pobres, actuando con mayor empatía y solidaridad."
+  }
+];
+
+function escapeHtml(texto) {
+  if (!texto) return "";
+  const div = document.createElement('div');
+  div.textContent = texto;
+  return div.innerHTML;
 }
+
+async function cargarCompromisos(animarIcono = false) {
+  const iconoRecarga = document.getElementById('iconoRecargaCompromisos');
+  if (animarIcono && iconoRecarga) {
+    iconoRecarga.classList.add('animate-spin');
+  }
+
+  // 1. Mostrar primero lo que haya en localStorage o por defecto (carga instantánea)
+  const guardados = localStorage.getItem('stand_compromisos_amazonia');
+  let listaActual = guardados ? JSON.parse(guardados) : compromisosPorDefecto;
+  renderizarCompromisos(listaActual);
+
+  // 2. Si hay URL de Google Sheets configurada, sincronizar en segundo plano
+  if (GOOGLE_SHEETS_SCRIPT_URL && GOOGLE_SHEETS_SCRIPT_URL.trim() !== "") {
+    try {
+      const respuesta = await fetch(GOOGLE_SHEETS_SCRIPT_URL + '?t=' + Date.now(), {
+        method: 'GET',
+        cache: 'no-store'
+      });
+      const datos = await respuesta.json();
+      
+      if (datos && datos.status === 'success' && Array.isArray(datos.data)) {
+        if (datos.data.length > 0) {
+          listaActual = datos.data;
+        }
+        localStorage.setItem('stand_compromisos_amazonia', JSON.stringify(listaActual));
+        renderizarCompromisos(listaActual);
+      }
+    } catch (error) {
+      console.warn('No se pudo conectar a Google Sheets temporalmente:', error);
+    }
+  }
+
+  if (animarIcono && iconoRecarga) {
+    setTimeout(() => {
+      iconoRecarga.classList.remove('animate-spin');
+    }, 600);
+  }
+}
+
+// Auto-actualizar cada 35 segundos si hay conexión con Google Sheets (ideal para pantalla del stand)
+setInterval(() => {
+  if (GOOGLE_SHEETS_SCRIPT_URL && GOOGLE_SHEETS_SCRIPT_URL.trim() !== "") {
+    cargarCompromisos(false);
+  }
+}, 35000);
 
 function renderizarCompromisos(lista) {
   const contenedor = document.getElementById('listaCompromisos');
@@ -453,59 +530,121 @@ function renderizarCompromisos(lista) {
   if (!contenedor) return;
 
   contenedor.innerHTML = '';
-  contador.textContent = `${lista.length} compromisos`;
+  if (contador) {
+    contador.textContent = `${lista.length} ${lista.length === 1 ? 'compromiso' : 'compromisos'}`;
+  }
 
   lista.forEach(item => {
     const card = document.createElement('div');
     card.className = 'p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm flex items-start gap-3 transition hover:border-emerald-300';
+    const inicial = (item.nombre && item.nombre.trim().length > 0) ? item.nombre.trim().charAt(0).toUpperCase() : "A";
+
     card.innerHTML = `
       <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs flex-shrink-0">
-        ${item.nombre.charAt(0)}
+        ${inicial}
       </div>
       <div class="flex-1">
         <div class="flex items-center justify-between mb-1">
-          <h4 class="font-bold text-xs sm:text-sm text-slate-800">${item.nombre}</h4>
-          <span class="text-[10px] text-slate-400 font-medium">${item.fecha}</span>
+          <h4 class="font-bold text-xs sm:text-sm text-slate-800">${escapeHtml(item.nombre || "Visitante")}</h4>
+          <span class="text-[10px] text-slate-400 font-medium">${escapeHtml(item.fecha || "Reciente")}</span>
         </div>
-        <p class="text-xs text-slate-600 leading-relaxed">${item.texto}</p>
+        <p class="text-xs text-slate-600 leading-relaxed">${escapeHtml(item.texto || "")}</p>
       </div>
     `;
     contenedor.appendChild(card);
   });
 }
 
-function agregarCompromiso(event) {
+async function agregarCompromiso(event) {
   event.preventDefault();
   const inputNombre = document.getElementById('nombreCompromiso');
   const inputTexto = document.getElementById('textoCompromiso');
+  const btnSubmit = document.getElementById('btnPublicarCompromiso');
+  const btnTexto = document.getElementById('btnPublicarTexto');
+  const estadoMsg = document.getElementById('estadoEnvioCompromiso');
 
   const nombre = inputNombre.value.trim();
   const texto = inputTexto.value.trim();
 
   if (!nombre || !texto) return;
 
-  const guardados = localStorage.getItem('stand_compromisos_amazonia');
-  const lista = guardados ? JSON.parse(guardados) : [...compromisosPorDefecto];
+  // Estado visual de guardado
+  if (btnSubmit) btnSubmit.disabled = true;
+  if (btnTexto) btnTexto.textContent = "Publicando...";
+  if (estadoMsg) {
+    estadoMsg.textContent = "Conectando con el stand...";
+    estadoMsg.className = "text-xs text-center font-medium mt-2 text-slate-500 block";
+  }
 
-  lista.unshift({
+  // Inserción inmediata (Optimistic UI) para respuesta instantánea en pantalla
+  const nuevoCompromiso = {
     nombre: nombre,
     texto: texto,
     fecha: "Recién"
-  });
+  };
 
+  const guardados = localStorage.getItem('stand_compromisos_amazonia');
+  const lista = guardados ? JSON.parse(guardados) : [...compromisosPorDefecto];
+  lista.unshift(nuevoCompromiso);
   localStorage.setItem('stand_compromisos_amazonia', JSON.stringify(lista));
   renderizarCompromisos(lista);
 
-  inputNombre.value = '';
-  inputTexto.value = '';
+  // Si Google Sheets está configurado, guardar en la nube
+  if (GOOGLE_SHEETS_SCRIPT_URL && GOOGLE_SHEETS_SCRIPT_URL.trim() !== "") {
+    try {
+      await fetch(GOOGLE_SHEETS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Evita bloqueos de CORS con Google Apps Script
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify({
+          nombre: nombre,
+          texto: texto,
+          fecha: new Date().toISOString()
+        })
+      });
 
+      if (estadoMsg) {
+        estadoMsg.textContent = "¡Compromiso guardado en la nube y publicado en el stand!";
+        estadoMsg.className = "text-xs text-center font-medium mt-2 text-emerald-600 block";
+      }
+    } catch (error) {
+      console.error('Error al guardar en Google Sheets:', error);
+      if (estadoMsg) {
+        estadoMsg.textContent = "Guardado localmente. Reintentaremos sincronizar.";
+        estadoMsg.className = "text-xs text-center font-medium mt-2 text-amber-600 block";
+      }
+    }
+  } else {
+    if (estadoMsg) {
+      estadoMsg.textContent = "¡Compromiso sumado al muro!";
+      estadoMsg.className = "text-xs text-center font-medium mt-2 text-emerald-600 block";
+    }
+  }
+
+  // Confetti de celebración
   if (window.confetti) {
     confetti({
-      particleCount: 40,
-      spread: 50,
+      particleCount: 50,
+      spread: 60,
       origin: { y: 0.7 }
     });
   }
+
+  // Limpiar campos
+  inputNombre.value = '';
+  inputTexto.value = '';
+
+  // Restaurar botón
+  setTimeout(() => {
+    if (btnSubmit) btnSubmit.disabled = false;
+    if (btnTexto) btnTexto.textContent = "Publicar en el Stand";
+    if (window.lucide) window.lucide.createIcons();
+    setTimeout(() => {
+      if (estadoMsg) estadoMsg.classList.add('hidden');
+    }, 4000);
+  }, 1000);
 }
 
 // --- 4. CÓDIGO QR GENERATOR ---
@@ -515,7 +654,12 @@ function generarCodigoQR() {
   if (!qrContainer) return;
 
   qrContainer.innerHTML = '';
-  const currentUrl = window.location.href || 'https://vatican.va';
+  // Redirigir directamente a la sección #compromiso para que el celular vaya directo a escribir
+  const origin = window.location.origin;
+  const path = window.location.pathname.replace(/\/+$/, '');
+  const currentUrl = (origin && origin !== 'null' && !origin.startsWith('file'))
+    ? `${origin}${path}#compromiso`
+    : window.location.href;
   
   if (currentUrlText) {
     currentUrlText.textContent = currentUrl;
