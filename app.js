@@ -478,13 +478,11 @@ function escapeHtml(texto) {
   return div.innerHTML;
 }
 
-async function cargarCompromisos(animarIcono = false) {
-  const iconoRecarga = document.getElementById('iconoRecargaCompromisos');
-  if (animarIcono && iconoRecarga) {
-    iconoRecarga.classList.add('animate-spin');
-  }
+let enviosRealizadosEnSesion = 0;
+const MAX_ENVIOS_POR_SESION = 3;
 
-  // 1. Mostrar primero lo que haya en localStorage o por defecto (carga instantánea)
+async function cargarCompromisos() {
+  // 1. Mostrar primero lo que haya en memoria local o por defecto (carga instantánea)
   const guardados = localStorage.getItem('stand_compromisos_amazonia');
   let listaActual = guardados ? JSON.parse(guardados) : compromisosPorDefecto;
   renderizarCompromisos(listaActual);
@@ -506,23 +504,17 @@ async function cargarCompromisos(animarIcono = false) {
         renderizarCompromisos(listaActual);
       }
     } catch (error) {
-      console.warn('No se pudo conectar a Google Sheets temporalmente:', error);
+      console.warn('Sincronización automática de Google Sheets temporalmente diferida:', error);
     }
-  }
-
-  if (animarIcono && iconoRecarga) {
-    setTimeout(() => {
-      iconoRecarga.classList.remove('animate-spin');
-    }, 600);
   }
 }
 
-// Auto-actualizar cada 35 segundos si hay conexión con Google Sheets (ideal para pantalla del stand)
+// Auto-actualizar solo periódicamente cada 15 segundos sin necesidad de pulsar botones
 setInterval(() => {
   if (GOOGLE_SHEETS_SCRIPT_URL && GOOGLE_SHEETS_SCRIPT_URL.trim() !== "") {
-    cargarCompromisos(false);
+    cargarCompromisos();
   }
-}, 35000);
+}, 15000);
 
 function renderizarCompromisos(lista) {
   const contenedor = document.getElementById('listaCompromisos');
@@ -536,7 +528,7 @@ function renderizarCompromisos(lista) {
 
   lista.forEach(item => {
     const card = document.createElement('div');
-    card.className = 'p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm flex items-start gap-3 transition hover:border-emerald-300';
+    card.className = 'p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm flex items-start gap-3 transition hover:border-emerald-300 animate-in fade-in slide-in-from-top-2 duration-300';
     const inicial = (item.nombre && item.nombre.trim().length > 0) ? item.nombre.trim().charAt(0).toUpperCase() : "A";
 
     card.innerHTML = `
@@ -555,28 +547,30 @@ function renderizarCompromisos(lista) {
   });
 }
 
-async function agregarCompromiso(event) {
+function agregarCompromiso(event) {
   event.preventDefault();
   const inputNombre = document.getElementById('nombreCompromiso');
   const inputTexto = document.getElementById('textoCompromiso');
-  const btnSubmit = document.getElementById('btnPublicarCompromiso');
-  const btnTexto = document.getElementById('btnPublicarTexto');
   const estadoMsg = document.getElementById('estadoEnvioCompromiso');
+
+  // Límite de 3 cargas por visita (se reinicia al actualizar la página)
+  if (enviosRealizadosEnSesion >= MAX_ENVIOS_POR_SESION) {
+    if (estadoMsg) {
+      estadoMsg.textContent = "Alcanzaste el límite de 3 reflexiones por visita. Si actualizás la página podés seguir cargando.";
+      estadoMsg.className = "text-xs text-center font-medium mt-2 text-amber-600 block";
+    }
+    return;
+  }
 
   const nombre = inputNombre.value.trim();
   const texto = inputTexto.value.trim();
 
   if (!nombre || !texto) return;
 
-  // Estado visual de guardado
-  if (btnSubmit) btnSubmit.disabled = true;
-  if (btnTexto) btnTexto.textContent = "Publicando...";
-  if (estadoMsg) {
-    estadoMsg.textContent = "Conectando con el stand...";
-    estadoMsg.className = "text-xs text-center font-medium mt-2 text-slate-500 block";
-  }
+  // Registrar envío de la sesión
+  enviosRealizadosEnSesion++;
 
-  // Inserción inmediata (Optimistic UI) para respuesta instantánea en pantalla
+  // 1. Inserción 100% instantánea en pantalla (cero demora)
   const nuevoCompromiso = {
     nombre: nombre,
     texto: texto,
@@ -589,62 +583,53 @@ async function agregarCompromiso(event) {
   localStorage.setItem('stand_compromisos_amazonia', JSON.stringify(lista));
   renderizarCompromisos(lista);
 
-  // Si Google Sheets está configurado, guardar en la nube
-  if (GOOGLE_SHEETS_SCRIPT_URL && GOOGLE_SHEETS_SCRIPT_URL.trim() !== "") {
-    try {
-      await fetch(GOOGLE_SHEETS_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors', // Evita bloqueos de CORS con Google Apps Script
-        headers: {
-          'Content-Type': 'text/plain;charset=utf-8'
-        },
-        body: JSON.stringify({
-          nombre: nombre,
-          texto: texto,
-          fecha: new Date().toISOString()
-        })
-      });
-
-      if (estadoMsg) {
-        estadoMsg.textContent = "¡Compromiso guardado en la nube y publicado en el stand!";
-        estadoMsg.className = "text-xs text-center font-medium mt-2 text-emerald-600 block";
-      }
-    } catch (error) {
-      console.error('Error al guardar en Google Sheets:', error);
-      if (estadoMsg) {
-        estadoMsg.textContent = "Guardado localmente. Reintentaremos sincronizar.";
-        estadoMsg.className = "text-xs text-center font-medium mt-2 text-amber-600 block";
-      }
-    }
-  } else {
-    if (estadoMsg) {
-      estadoMsg.textContent = "¡Compromiso sumado al muro!";
-      estadoMsg.className = "text-xs text-center font-medium mt-2 text-emerald-600 block";
-    }
-  }
-
-  // Confetti de celebración
+  // 2. Confetti instantáneo
   if (window.confetti) {
     confetti({
-      particleCount: 50,
-      spread: 60,
+      particleCount: 45,
+      spread: 55,
       origin: { y: 0.7 }
     });
   }
 
-  // Limpiar campos
+  // 3. Limpiar formulario inmediatamente
   inputNombre.value = '';
   inputTexto.value = '';
 
-  // Restaurar botón
-  setTimeout(() => {
-    if (btnSubmit) btnSubmit.disabled = false;
-    if (btnTexto) btnTexto.textContent = "Publicar en el Stand";
-    if (window.lucide) window.lucide.createIcons();
-    setTimeout(() => {
-      if (estadoMsg) estadoMsg.classList.add('hidden');
-    }, 4000);
-  }, 1000);
+  // 4. Feedback inmediato al usuario
+  if (estadoMsg) {
+    if (enviosRealizadosEnSesion >= MAX_ENVIOS_POR_SESION) {
+      estadoMsg.textContent = "¡Publicado en el muro! Alcanzaste las 3 reflexiones. (Si actualizás la página podés seguir cargando)";
+      estadoMsg.className = "text-xs text-center font-medium mt-2 text-emerald-700 font-semibold block";
+    } else {
+      const quedan = MAX_ENVIOS_POR_SESION - enviosRealizadosEnSesion;
+      estadoMsg.textContent = `¡Publicado al instante en el stand! (Podés cargar ${quedan} más en esta visita)`;
+      estadoMsg.className = "text-xs text-center font-medium mt-2 text-emerald-600 block";
+      setTimeout(() => {
+        if (estadoMsg && enviosRealizadosEnSesion < MAX_ENVIOS_POR_SESION) {
+          estadoMsg.classList.add('hidden');
+        }
+      }, 3500);
+    }
+  }
+
+  // 5. Guardar en Google Sheets en segundo plano sin congelar la interfaz
+  if (GOOGLE_SHEETS_SCRIPT_URL && GOOGLE_SHEETS_SCRIPT_URL.trim() !== "") {
+    fetch(GOOGLE_SHEETS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify({
+        nombre: nombre,
+        texto: texto,
+        fecha: new Date().toISOString()
+      })
+    }).catch(error => {
+      console.warn('Envío a Google Sheets en segundo plano:', error);
+    });
+  }
 }
 
 // --- 4. CÓDIGO QR GENERATOR ---
