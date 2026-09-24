@@ -551,16 +551,9 @@ function agregarCompromiso(event) {
   event.preventDefault();
   const inputNombre = document.getElementById('nombreCompromiso');
   const inputTexto = document.getElementById('textoCompromiso');
-  const estadoMsg = document.getElementById('estadoEnvioCompromiso');
 
   // Límite de 3 cargas por visita (se reinicia al actualizar la página)
-  if (enviosRealizadosEnSesion >= MAX_ENVIOS_POR_SESION) {
-    if (estadoMsg) {
-      estadoMsg.textContent = "Alcanzaste el límite de 3 reflexiones por visita. Si actualizás la página podés seguir cargando.";
-      estadoMsg.className = "text-xs text-center font-medium mt-2 text-amber-600 block";
-    }
-    return;
-  }
+  if (enviosRealizadosEnSesion >= MAX_ENVIOS_POR_SESION) return;
 
   const nombre = inputNombre.value.trim();
   const texto = inputTexto.value.trim();
@@ -596,24 +589,7 @@ function agregarCompromiso(event) {
   inputNombre.value = '';
   inputTexto.value = '';
 
-  // 4. Feedback inmediato al usuario
-  if (estadoMsg) {
-    if (enviosRealizadosEnSesion >= MAX_ENVIOS_POR_SESION) {
-      estadoMsg.textContent = "¡Publicado en el muro! Alcanzaste las 3 reflexiones. (Si actualizás la página podés seguir cargando)";
-      estadoMsg.className = "text-xs text-center font-medium mt-2 text-emerald-700 font-semibold block";
-    } else {
-      const quedan = MAX_ENVIOS_POR_SESION - enviosRealizadosEnSesion;
-      estadoMsg.textContent = `¡Publicado al instante en el stand! (Podés cargar ${quedan} más en esta visita)`;
-      estadoMsg.className = "text-xs text-center font-medium mt-2 text-emerald-600 block";
-      setTimeout(() => {
-        if (estadoMsg && enviosRealizadosEnSesion < MAX_ENVIOS_POR_SESION) {
-          estadoMsg.classList.add('hidden');
-        }
-      }, 3500);
-    }
-  }
-
-  // 5. Guardar en Google Sheets en segundo plano sin congelar la interfaz
+  // 4. Guardar en Google Sheets en segundo plano sin congelar la interfaz
   if (GOOGLE_SHEETS_SCRIPT_URL && GOOGLE_SHEETS_SCRIPT_URL.trim() !== "") {
     fetch(GOOGLE_SHEETS_SCRIPT_URL, {
       method: 'POST',
