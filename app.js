@@ -654,12 +654,10 @@ function generarCodigoQR() {
   if (!qrContainer) return;
 
   qrContainer.innerHTML = '';
-  // Redirigir directamente a la sección #compromiso para que el celular vaya directo a escribir
-  const origin = window.location.origin;
-  const path = window.location.pathname.replace(/\/+$/, '');
-  const currentUrl = (origin && origin !== 'null' && !origin.startsWith('file'))
-    ? `${origin}${path}#compromiso`
-    : window.location.href;
+  // Enlace a la página principal
+  const currentUrl = (window.location.origin && window.location.origin !== 'null' && !window.location.origin.startsWith('file'))
+    ? `${window.location.origin}${window.location.pathname}`
+    : (window.location.href || 'https://vatican.va');
   
   if (currentUrlText) {
     currentUrlText.textContent = currentUrl;
