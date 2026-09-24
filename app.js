@@ -441,30 +441,6 @@ function iniciarTriviaStand() {
   }
 }
 
-// --- 3. MURO DE COMPROMISOS (Reflexiones de visitantes del stand) ---
-const compromisosPorDefecto = [
-  {
-    nombre: "Camila R.",
-    texto: "Me comprometo a ser más consciente del origen de lo que consumo y rechazar la cultura del descarte.",
-    fecha: "Hoy en el stand"
-  },
-  {
-    nombre: "Prof. Marcos",
-    texto: "Excelente síntesis de los 4 sueños. Fundamental escuchar la sabiduría ancestral de nuestros pueblos originarios.",
-    fecha: "Hoy en el stand"
-  },
-  {
-    nombre: "Lucas & Sofía",
-    texto: "El río nos une a todos. Como jóvenes tenemos el deber de cuidar las raíces y no dejar que la selva se convierta en desierto.",
-    fecha: "Hoy en el stand"
-  },
-  {
-    nombre: "Hermana Teresa",
-    texto: "Hermoso reconocimiento a la entrega incansable de tantas mujeres en las comunidades más alejadas del Amazonas.",
-    fecha: "Hoy en el stand"
-  }
-];
-
 function cargarCompromisos() {
   const guardados = localStorage.getItem('stand_compromisos_amazonia');
   const lista = guardados ? JSON.parse(guardados) : compromisosPorDefecto;
