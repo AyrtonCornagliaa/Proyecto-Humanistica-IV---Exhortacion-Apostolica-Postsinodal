@@ -482,13 +482,14 @@ let enviosRealizadosEnSesion = 0;
 const MAX_ENVIOS_POR_SESION = 3;
 
 async function cargarCompromisos() {
-  // 1. Mostrar primero lo que haya en memoria local o por defecto (carga instantánea)
-  const guardados = localStorage.getItem('stand_compromisos_amazonia');
-  let listaActual = guardados ? JSON.parse(guardados) : compromisosPorDefecto;
-  renderizarCompromisos(listaActual);
-
-  // 2. Si hay URL de Google Sheets configurada, sincronizar en segundo plano
+  // Si hay URL de Google Sheets configurada, Sheets es la fuente de verdad
   if (GOOGLE_SHEETS_SCRIPT_URL && GOOGLE_SHEETS_SCRIPT_URL.trim() !== "") {
+    // Mostrar cache local mientras carga (respuesta instantánea)
+    const guardados = localStorage.getItem('stand_compromisos_amazonia');
+    if (guardados) {
+      renderizarCompromisos(JSON.parse(guardados));
+    }
+
     try {
       const respuesta = await fetch(GOOGLE_SHEETS_SCRIPT_URL + '?t=' + Date.now(), {
         method: 'GET',
@@ -497,15 +498,19 @@ async function cargarCompromisos() {
       const datos = await respuesta.json();
       
       if (datos && datos.status === 'success' && Array.isArray(datos.data)) {
-        if (datos.data.length > 0) {
-          listaActual = datos.data;
-        }
-        localStorage.setItem('stand_compromisos_amazonia', JSON.stringify(listaActual));
-        renderizarCompromisos(listaActual);
+        // Sheets es la verdad absoluta: si está vacío, se muestra vacío
+        localStorage.setItem('stand_compromisos_amazonia', JSON.stringify(datos.data));
+        renderizarCompromisos(datos.data);
       }
     } catch (error) {
-      console.warn('Sincronización automática de Google Sheets temporalmente diferida:', error);
+      console.warn('Sincronización con Google Sheets diferida:', error);
+      // Si falla la red, mostrar lo que haya en cache
+      if (!guardados) renderizarCompromisos([]);
     }
+  } else {
+    // Sin Google Sheets: solo localStorage o por defecto
+    const guardados = localStorage.getItem('stand_compromisos_amazonia');
+    renderizarCompromisos(guardados ? JSON.parse(guardados) : compromisosPorDefecto);
   }
 }
 
