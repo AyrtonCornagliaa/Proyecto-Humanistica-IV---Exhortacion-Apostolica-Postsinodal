@@ -1,0 +1,228 @@
+/* styles.css - Proyecto Stand Humanística IV (Versión Enriquecida con Efectos Estéticos) */
+
+/* Tipografía base y scroll suave */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #1e293b;
+  background-color: #f8fafc;
+  overflow-x: hidden;
+}
+
+/* Tipografías serif solemnes */
+h1, h2, h3, .font-serif {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* --- EFECTOS AMBIENTALES Y LUCIÉRNAGAS (BIOLUMINISCENCIA SELVÁTICA) --- */
+.firefly {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(1px);
+  animation: driftAndGlow ease-in-out infinite alternate;
+}
+
+.firefly-gold {
+  background: radial-gradient(circle, #fde047 20%, #eab308 60%, transparent 100%);
+  box-shadow: 0 0 14px 4px rgba(250, 204, 21, 0.7);
+}
+
+.firefly-green {
+  background: radial-gradient(circle, #86efac 20%, #22c55e 60%, transparent 100%);
+  box-shadow: 0 0 14px 4px rgba(74, 222, 128, 0.7);
+}
+
+@keyframes driftAndGlow {
+  0% {
+    opacity: 0.1;
+    transform: translateY(0px) translateX(0px) scale(0.7);
+  }
+  50% {
+    opacity: 0.95;
+    transform: translateY(-25px) translateX(15px) scale(1.2);
+  }
+  100% {
+    opacity: 0.2;
+    transform: translateY(-50px) translateX(-15px) scale(0.8);
+  }
+}
+
+/* Glow animado para títulos y bordes */
+.glow-text-emerald {
+  text-shadow: 0 0 25px rgba(52, 211, 153, 0.35);
+}
+
+.glow-border {
+  position: relative;
+}
+.glow-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.6), rgba(245, 158, 11, 0.4), rgba(16, 185, 129, 0.2));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Efecto Shimmer para botones destacados */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.25) 30%,
+    rgba(255, 255, 255, 0.4) 35%,
+    transparent 45%
+  );
+  transform: rotate(30deg);
+  animation: shimmerEffect 4.5s infinite;
+}
+
+@keyframes shimmerEffect {
+  0% {
+    transform: translateX(-150%) rotate(30deg);
+  }
+  25%, 100% {
+    transform: translateX(150%) rotate(30deg);
+  }
+}
+
+/* --- BURBUJAS DE INFORMACIÓN INTERACTIVAS (GUÍA RÁPIDA) --- */
+.bubble-container {
+  position: relative;
+}
+
+.dream-bubble-card {
+  position: absolute;
+  z-index: 40;
+  left: 0;
+  right: 0;
+  top: calc(100% + 10px);
+  background: rgba(10, 47, 34, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 1.25rem;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(16, 185, 129, 0.3);
+  animation: bubblePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  transform-origin: top center;
+}
+
+/* Flechita de la burbuja */
+.dream-bubble-card::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 28px;
+  width: 16px;
+  height: 16px;
+  transform: rotate(45deg);
+  background: inherit;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@keyframes bubblePop {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Botones de selección de sueños */
+.sueno-tab {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sueno-tab:hover {
+  transform: translateY(-2px);
+}
+
+/* Animaciones de entrada suaves */
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sueno-content {
+  animation: fadeInSlide 0.4s ease-out forwards;
+}
+
+/* Efectos de elevación para tarjetas */
+.card-hover-lift {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+.card-hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.12);
+}
+
+/* Estilos de impresión para el resumen analítico */
+@media print {
+  nav, footer, #trivia, #compromiso, #navbar, button, .no-print, .firefly {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  #modalResumen {
+    position: static !important;
+    display: block !important;
+    background: transparent !important;
+    padding: 0 !important;
+  }
+
+  #modalResumen > div {
+    box-shadow: none !important;
+    border: none !important;
+    max-width: 100% !important;
+    max-height: none !important;
+  }
+}
+
+/* Barra de desplazamiento estética */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #059669;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #047857;
+}

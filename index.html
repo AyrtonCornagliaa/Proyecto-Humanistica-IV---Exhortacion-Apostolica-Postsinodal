@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exhortación Apostólica Postsinodal «Querida Amazonia» | Stand Humanística IV</title>
+  <meta name="description" content="Portal interactivo e informativo sobre la Exhortación Apostólica Postsinodal 'Querida Amazonia' del Papa Francisco. Proyecto Académico Humanística IV.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            amazonia: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              300: '#86efac',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+              950: '#052e16',
+            },
+            selva: {
+              deep: '#062319',
+              dark: '#0a3526',
+              river: '#0e4e43',
+              gold: '#d97706',
+              amber: '#f59e0b',
+              sand: '#fcfaf4',
+              bark: '#3d2616'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+            cinzel: ['"Cinzel"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#f8f9fa] text-slate-800 antialiased selection:bg-emerald-600 selection:text-white">
+
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-50 bg-[#062319]/90 backdrop-blur-md border-b border-emerald-900/40 text-white transition-all duration-300" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo / Titulo -->
+        <a href="#inicio" class="flex items-center gap-3 group">
+          <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-amber-500 flex items-center justify-center shadow-lg shadow-emerald-950/40 group-hover:scale-105 transition-transform">
+            <i data-lucide="book-open-check" class="w-6 h-6 text-white"></i>
+          </div>
+          <div>
+            <span class="text-xs uppercase tracking-widest text-emerald-400 font-semibold block">Stand Humanística IV</span>
+            <span class="text-lg sm:text-xl font-bold font-serif text-white tracking-wide flex items-center gap-1.5">
+              Querida Amazonia
+              <span class="text-xs bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded-full font-sans font-medium">Exhortación</span>
+            </span>
+          </div>
+        </a>
+
+        <!-- Desktop Links -->
+        <div class="hidden md:flex items-center space-x-1 lg:space-x-3 text-sm font-medium">
+          <a href="#que-es" class="px-3 py-2 rounded-lg text-emerald-100 hover:text-white hover:bg-emerald-800/40 transition">¿Qué es?</a>
+          <a href="#contexto" class="px-3 py-2 rounded-lg text-emerald-100 hover:text-white hover:bg-emerald-800/40 transition">El Sínodo</a>
+          <a href="#suenos" class="px-3 py-2 rounded-lg text-emerald-100 hover:text-white hover:bg-emerald-800/40 transition font-semibold text-emerald-300">Los 4 Sueños</a>
+          <a href="#poesia" class="px-3 py-2 rounded-lg text-emerald-100 hover:text-white hover:bg-emerald-800/40 transition">Poesía & Clamor</a>
+          <a href="#maria" class="px-3 py-2 rounded-lg text-emerald-100 hover:text-white hover:bg-emerald-800/40 transition">Conclusión</a>
+          <a href="#trivia" class="px-3 py-2 rounded-lg text-amber-300 hover:text-amber-200 hover:bg-amber-500/20 transition flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-4 h-4"></i> Trivia Stand
+          </a>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button onclick="abrirModalQR()" class="btn-shimmer flex items-center gap-2 bg-gradient-to-r from-emerald-600/30 to-teal-600/30 hover:from-emerald-500/50 hover:to-teal-500/50 border border-emerald-400/40 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-emerald-200 hover:text-white transition shadow-lg shadow-emerald-950/30" title="Compartir en tu celular con Código QR">
+            <i data-lucide="qr-code" class="w-4 h-4 text-emerald-300"></i>
+            <span>Escanear QR</span>
+          </button>
+
+          <!-- Mobile Menu Button -->
+          <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-emerald-200 hover:text-white hover:bg-emerald-800/50 focus:outline-none">
+            <i data-lucide="menu" id="menuIcon" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Dropdown -->
+    <div id="mobileMenu" class="hidden md:hidden bg-[#0a3526] border-b border-emerald-800/60 px-4 pt-3 pb-5 space-y-2">
+      <a href="#que-es" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-emerald-100 hover:bg-emerald-800/40">¿Qué es una Exhortación Postsinodal?</a>
+      <a href="#contexto" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-emerald-100 hover:bg-emerald-800/40">El Sínodo de la Amazonia</a>
+      <a href="#suenos" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-emerald-300 font-semibold hover:bg-emerald-800/40">Los Cuatro Grandes Sueños</a>
+      <a href="#poesia" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-emerald-100 hover:bg-emerald-800/40">Poesía y Voces de la Selva</a>
+      <a href="#maria" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-emerald-100 hover:bg-emerald-800/40">Madre de la Amazonia</a>
+      <a href="#trivia" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-amber-300 font-medium hover:bg-amber-500/20">Trivia Interactiva del Stand</a>
+      <a href="#compromiso" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-emerald-100 hover:bg-emerald-800/40">Muro de Compromisos</a>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <header id="inicio" class="relative overflow-hidden bg-gradient-to-b from-[#062319] via-[#093527] to-[#0a3325] text-white pt-12 pb-24 lg:pt-20 lg:pb-32">
+    <!-- Luces vivas / Luciérnagas amazónicas (Generadas dinámicamente) -->
+    <div id="firefliesContainer" class="absolute inset-0 pointer-events-none overflow-hidden z-0"></div>
+
+    <!-- Background Decorators -->
+    <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:24px_24px]"></div>
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Column -->
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+          
+          <div class="inline-flex items-center gap-2 bg-emerald-500/15 border border-emerald-400/40 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold text-emerald-300 backdrop-blur-md shadow-lg shadow-emerald-950/50">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <i data-lucide="feather" class="w-4 h-4 text-amber-400"></i>
+            <span>Documento Magisterial del Papa Francisco • Febrero 2020</span>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-serif tracking-tight leading-[1.15]">
+            Exhortación Apostólica Postsinodal <br class="hidden sm:inline">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-200 to-amber-300 glow-text-emerald">
+              «Querida Amazonia»
+            </span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-emerald-100/90 leading-relaxed font-normal max-w-2xl mx-auto lg:mx-0">
+            Un llamado urgente y profético a toda la humanidad para defender un bioma vital para el planeta y abrazar con justicia, cultura y fe a las comunidades que lo habitan.
+          </p>
+
+          <!-- Buttons -->
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+            <a href="#suenos" class="btn-shimmer bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-bold px-6 py-3.5 rounded-xl shadow-xl shadow-emerald-950/60 hover:scale-105 transition-all flex items-center gap-2 text-sm sm:text-base">
+              <span>Explorar los 4 Sueños</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+
+            <a href="#que-es" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-medium px-5 py-3.5 rounded-xl backdrop-blur-md transition-all hover:scale-105 flex items-center gap-2 text-sm sm:text-base">
+              <i data-lucide="help-circle" class="w-4 h-4 text-emerald-300"></i>
+              <span>¿Qué significa el término?</span>
+            </a>
+
+            <button onclick="iniciarTriviaStand()" class="bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 font-semibold px-5 py-3.5 rounded-xl transition-all hover:scale-105 flex items-center gap-2 text-sm sm:text-base">
+              <i data-lucide="gamepad-2" class="w-4 h-4 text-amber-400"></i>
+              <span>Probar Trivia</span>
+            </button>
+          </div>
+
+          <!-- Quick Stand Info Badges -->
+          <div class="pt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 border-t border-emerald-800/60">
+            <div class="bg-white/5 hover:bg-white/10 rounded-xl p-3 border border-white/10 text-center transition card-hover-lift">
+              <span class="block text-2xl font-bold font-serif text-amber-400">9</span>
+              <span class="text-xs text-emerald-200/80">Países del Bioma</span>
+            </div>
+            <div class="bg-white/5 hover:bg-white/10 rounded-xl p-3 border border-white/10 text-center transition card-hover-lift">
+              <span class="block text-2xl font-bold font-serif text-amber-400">+110</span>
+              <span class="text-xs text-emerald-200/80">Pueblos en Aislamiento</span>
+            </div>
+            <div class="bg-white/5 hover:bg-white/10 rounded-xl p-3 border border-white/10 text-center transition card-hover-lift">
+              <span class="block text-2xl font-bold font-serif text-amber-400">4</span>
+              <span class="text-xs text-emerald-200/80">Grandes Sueños</span>
+            </div>
+            <div class="bg-white/5 hover:bg-white/10 rounded-xl p-3 border border-white/10 text-center transition card-hover-lift">
+              <span class="block text-2xl font-bold font-serif text-amber-400">111</span>
+              <span class="text-xs text-emerald-200/80">Numerales de Luz</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column (Guía Rápida con Burbujas Interactivas) -->
+        <div class="lg:col-span-5 relative">
+          <div class="relative mx-auto max-w-md bg-gradient-to-b from-white/10 to-white/5 p-6 sm:p-7 rounded-3xl border border-white/20 backdrop-blur-2xl shadow-2xl shadow-emerald-950/70 glow-border">
+            
+            <div class="absolute -top-3.5 -right-3.5 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-xs font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Toca cada sueño
+            </div>
+
+            <div class="flex items-center gap-4 mb-5">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-500/25 border border-emerald-400/40 flex items-center justify-center text-emerald-300 shadow-inner">
+                <i data-lucide="compass" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <h3 class="font-serif text-lg sm:text-xl font-bold text-white">Guía Rápida para el Visitante</h3>
+                <p class="text-xs text-emerald-200/80">Tocá cualquier sueño para ver su información en detalle</p>
+              </div>
+            </div>
+
+            <!-- Botones interactivos que abren el modal como Escanear QR -->
+            <div class="space-y-2.5">
+              
+              <!-- Botón 1: Social -->
+              <button onclick="abrirModalSueno('social')" class="w-full text-left group flex items-center justify-between p-3.5 rounded-2xl bg-emerald-950/50 hover:bg-blue-950/60 border border-emerald-700/40 hover:border-blue-400/60 transition-all duration-200 shadow-sm">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-9 h-9 rounded-xl bg-blue-500/25 text-blue-300 border border-blue-400/30 flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform">1</div>
+                  <div>
+                    <h4 class="text-sm font-bold text-white group-hover:text-blue-300 transition">Sueño Social</h4>
+                    <p class="text-xs text-emerald-200/70">Derechos, pueblos originarios y justicia</p>
+                  </div>
+                </div>
+                <div class="w-8 h-8 rounded-xl bg-white/5 group-hover:bg-blue-500/20 text-emerald-300 group-hover:text-blue-300 flex items-center justify-center transition">
+                  <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-0.5 transition-transform"></i>
+                </div>
+              </button>
+
+              <!-- Botón 2: Cultural -->
+              <button onclick="abrirModalSueno('cultural')" class="w-full text-left group flex items-center justify-between p-3.5 rounded-2xl bg-emerald-950/50 hover:bg-amber-950/60 border border-emerald-700/40 hover:border-amber-400/60 transition-all duration-200 shadow-sm">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-9 h-9 rounded-xl bg-amber-500/25 text-amber-300 border border-amber-400/30 flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform">2</div>
+                  <div>
+                    <h4 class="text-sm font-bold text-white group-hover:text-amber-300 transition">Sueño Cultural</h4>
+                    <p class="text-xs text-emerald-200/70">Poliedro amazónico, raíces y memoria</p>
+                  </div>
+                </div>
+                <div class="w-8 h-8 rounded-xl bg-white/5 group-hover:bg-amber-500/20 text-emerald-300 group-hover:text-amber-300 flex items-center justify-center transition">
+                  <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-0.5 transition-transform"></i>
+                </div>
+              </button>
+
+              <!-- Botón 3: Ecológico -->
+              <button onclick="abrirModalSueno('ecologico')" class="w-full text-left group flex items-center justify-between p-3.5 rounded-2xl bg-emerald-950/50 hover:bg-emerald-900/60 border border-emerald-700/40 hover:border-emerald-400/60 transition-all duration-200 shadow-sm">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-9 h-9 rounded-xl bg-emerald-500/25 text-emerald-300 border border-emerald-400/30 flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform">3</div>
+                  <div>
+                    <h4 class="text-sm font-bold text-white group-hover:text-emerald-300 transition">Sueño Ecológico</h4>
+                    <p class="text-xs text-emerald-200/70">El gran río, la selva y la ecología integral</p>
+                  </div>
+                </div>
+                <div class="w-8 h-8 rounded-xl bg-white/5 group-hover:bg-emerald-500/20 text-emerald-300 group-hover:text-emerald-200 flex items-center justify-center transition">
+                  <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-0.5 transition-transform"></i>
+                </div>
+              </button>
+
+              <!-- Botón 4: Eclesial -->
+              <button onclick="abrirModalSueno('eclesial')" class="w-full text-left group flex items-center justify-between p-3.5 rounded-2xl bg-emerald-950/50 hover:bg-purple-950/60 border border-emerald-700/40 hover:border-purple-400/60 transition-all duration-200 shadow-sm">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-9 h-9 rounded-xl bg-purple-500/25 text-purple-300 border border-purple-400/30 flex items-center justify-center font-bold text-sm group-hover:scale-110 transition-transform">4</div>
+                  <div>
+                    <h4 class="text-sm font-bold text-white group-hover:text-purple-300 transition">Sueño Eclesial</h4>
+                    <p class="text-xs text-emerald-200/70">Rostro amazónico, laicado y mujeres</p>
+                  </div>
+                </div>
+                <div class="w-8 h-8 rounded-xl bg-white/5 group-hover:bg-purple-500/20 text-emerald-300 group-hover:text-purple-300 flex items-center justify-center transition">
+                  <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-0.5 transition-transform"></i>
+                </div>
+              </button>
+
+            </div>
+
+            <!-- Stand Quote -->
+            <div class="mt-5 pt-3.5 border-t border-white/10 text-center">
+              <p class="text-xs italic text-emerald-200/80">
+                «Un verdadero planteo ecológico se convierte siempre en un planteo social, que debe integrar la justicia... para escuchar tanto el clamor de la tierra como el clamor de los pobres.»
+              </p>
+              <span class="text-[11px] font-semibold text-amber-300 block mt-1">— Papa Francisco (n. 8)</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- SECTION: ¿QUÉ ES UNA EXHORTACIÓN APOSTÓLICA POSTSINODAL? (Claridad conceptual para el stand) -->
+  <section id="que-es" class="py-20 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold uppercase tracking-widest text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full inline-block mb-3">
+          Conceptos Fundamentales
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-bold font-serif text-slate-900">
+          ¿Qué es una <span class="text-emerald-700">Exhortación Apostólica Postsinodal</span>?
+        </h2>
+        <p class="mt-4 text-slate-600 text-base sm:text-lg">
+          Para comprender este proyecto en nuestro stand, es clave entender qué significa este documento eclesiástico y cómo se originó.
+        </p>
+      </div>
+
+      <!-- Definition Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        
+        <!-- Card 1: Exhortación Apostólica -->
+        <div class="bg-gradient-to-b from-[#f8faf9] to-[#edf6f2] p-8 rounded-2xl border border-emerald-200 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center mb-5 shadow-md shadow-emerald-600/30">
+            <i data-lucide="scroll" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold font-serif text-slate-900 mb-2">1. Exhortación Apostólica</h3>
+          <p class="text-slate-600 text-sm leading-relaxed mb-4">
+            Es un documento magisterial solemne emitido por el Papa para animar, exhortar y orientar a los fieles sobre una temática pastoral, social o de fe relevante.
+          </p>
+          <div class="bg-white/80 p-3 rounded-xl border border-emerald-100 text-xs text-emerald-900 font-medium">
+            <i data-lucide="info" class="w-3.5 h-3.5 inline mr-1 text-emerald-600"></i> No define dogmas nuevos; su tono es pastoral, de impulso, aliento y discernimiento activo.
+          </div>
+        </div>
+
+        <!-- Card 2: Postsinodal -->
+        <div class="bg-gradient-to-b from-[#f8faf9] to-[#fbf7ed] p-8 rounded-2xl border border-amber-200 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-amber-600 text-white flex items-center justify-center mb-5 shadow-md shadow-amber-600/30">
+            <i data-lucide="users" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold font-serif text-slate-900 mb-2">2. ¿Por qué "Postsinodal"?</h3>
+          <p class="text-slate-600 text-sm leading-relaxed mb-4">
+            El prefijo <em>"post"</em> indica que se publica <strong>después de un Sínodo de los Obispos</strong>. Recoge y hace resonar todas las reflexiones surgidas de dicha asamblea.
+          </p>
+          <div class="bg-white/80 p-3 rounded-xl border border-amber-100 text-xs text-amber-900 font-medium">
+            <i data-lucide="sparkle" class="w-3.5 h-3.5 inline mr-1 text-amber-600"></i> Nace del diálogo previo con miles de personas de la Amazonia y los círculos de trabajo del Sínodo.
+          </div>
+        </div>
+
+        <!-- Card 3: El Sínodo -->
+        <div class="bg-gradient-to-b from-[#f8faf9] to-[#f0f9ff] p-8 rounded-2xl border border-blue-200 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center mb-5 shadow-md shadow-blue-600/30">
+            <i data-lucide="footprints" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold font-serif text-slate-900 mb-2">3. El "Sínodo" (Caminar Juntos)</h3>
+          <p class="text-slate-600 text-sm leading-relaxed mb-4">
+            Viene del griego <em>syn-hodos</em>: "hacer camino juntos". Es la asamblea donde obispos, laicos, científicos e indígenas se reúnen con el Papa para debatir desafíos cruciales.
+          </p>
+          <div class="bg-white/80 p-3 rounded-xl border border-blue-100 text-xs text-blue-900 font-medium">
+            <i data-lucide="calendar" class="w-3.5 h-3.5 inline mr-1 text-blue-600"></i> Tuvo lugar en Roma del 6 al 27 de octubre de 2019 bajo el lema de nuevos caminos y ecología integral.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Infografía interactiva del Proceso -->
+      <div class="bg-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
+        <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-3xl mb-8">
+          <span class="text-xs uppercase font-bold tracking-widest text-amber-400">Ruta de Creación del Documento</span>
+          <h3 class="text-2xl sm:text-3xl font-bold font-serif mt-1">De la voz de las selvas a la Exhortación Pontificia</h3>
+          <p class="text-slate-300 text-sm mt-2">Un recorrido sinodal participativo inédito en la historia de la Iglesia contemporánea:</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+          
+          <!-- Step 1 -->
+          <div class="bg-white/10 p-5 rounded-2xl border border-white/10 relative">
+            <span class="text-xs font-bold text-amber-400 block mb-2">FASE 1 • 2018 - 2019</span>
+            <h4 class="font-bold text-white text-base mb-1">Escucha en el Territorio</h4>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Consulta amplia coordinada por la REPAM a más de 87,000 personas de comunidades indígenas, campesinas y ribereñas en los 9 países amazónicos.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="bg-white/10 p-5 rounded-2xl border border-white/10 relative">
+            <span class="text-xs font-bold text-amber-400 block mb-2">FASE 2 • Octubre 2019</span>
+            <h4 class="font-bold text-white text-base mb-1">Asamblea Especial en Roma</h4>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Tres semanas de debate profundo en el Vaticano: "Amazonia: nuevos caminos para la Iglesia y para una ecología integral".
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="bg-white/10 p-5 rounded-2xl border border-white/10 relative">
+            <span class="text-xs font-bold text-amber-400 block mb-2">FASE 3 • Documento Final</span>
+            <h4 class="font-bold text-white text-base mb-1">Conclusiones del Sínodo</h4>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Los padres sinodales votan y entregan el documento con los diagnósticos y propuestas concretas de acción para la región.
+            </p>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="bg-gradient-to-br from-emerald-600/40 to-emerald-800/40 p-5 rounded-2xl border border-emerald-400/50 relative shadow-inner">
+            <span class="text-xs font-bold text-emerald-300 block mb-2">FASE 4 • 2 Feb 2020</span>
+            <h4 class="font-bold text-white text-base mb-1">«Querida Amazonia»</h4>
+            <p class="text-xs text-slate-200 leading-relaxed">
+              El Papa Francisco publica la Exhortación, sin reemplazar el documento previo, sino condensándolo en <strong>Cuatro Grandes Sueños</strong> proféticos.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION: CONTEXTO GEOGRÁFICO Y HUMANO (El Bioma Amazónico) -->
+  <section id="contexto" class="py-20 bg-gradient-to-b from-[#edf6f2] to-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <div class="lg:col-span-6 space-y-6">
+          <span class="text-xs font-bold uppercase tracking-widest text-emerald-800 bg-emerald-200/70 px-3 py-1 rounded-full">
+            El Escenario de la Exhortación
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-bold font-serif text-slate-900 leading-tight">
+            La Amazonia: Totalidad plurinacional y pulmón de la humanidad
+          </h2>
+          <p class="text-slate-700 text-base leading-relaxed">
+            Como describe el Papa Francisco en el numeral 5, la Amazonia no pertenece a un solo Estado ni es un territorio vacío: es una realidad interconectada compartida por <strong>nueve países</strong> y habitada por millones de personas con cosmovisiones ancestrales de respeto mutuo con el agua y la selva.
+          </p>
+
+          <!-- Countries List Tags -->
+          <div class="bg-white p-5 rounded-2xl border border-emerald-100 shadow-sm">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-3">Los 9 países del bioma panamazónico:</span>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-lg border border-emerald-200/60">🇧🇷 Brasil</span>
+              <span class="px-3 py-1 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-lg border border-emerald-200/60">🇧🇴 Bolivia</span>
+              <span class="px-3 py-1 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-lg border border-emerald-200/60">🇨🇴 Colombia</span>
+              <span class="px-3 py-1 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-lg border border-emerald-200/60">🇪🇨 Ecuador</span>
+              <span class="px-3 py-1 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-lg border border-emerald-200/60">🇬🇾 Guyana</span>
+              <span class="px-3 py-1 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-lg border border-emerald-200/60">🇵🇪 Perú</span>
+              <span class="px-3 py-1 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-lg border border-emerald-200/60">🇸🇷 Surinam</span>
+              <span class="px-3 py-1 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-lg border border-emerald-200/60">🇻🇪 Venezuela</span>
+              <span class="px-3 py-1 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-lg border border-emerald-200/60">🇬🇫 Guayana Francesa</span>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 rounded-full bg-emerald-600 text-white flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5">✓</div>
+              <p class="text-sm text-slate-700"><strong>El suelo amazónico es frágil:</strong> la selva crece <em>sobre</em> el suelo y no <em>del</em> suelo; su tala indiscriminada conduce a la desertificación irreversible (n. 48).</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 rounded-full bg-emerald-600 text-white flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5">✓</div>
+              <p class="text-sm text-slate-700"><strong>Pueblos Indígenas en Aislamiento Voluntario (PIAV):</strong> más de 110 etnias que custodian un tesoro humano irrepetible amenazado por la colonización posmoderna (n. 29).</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 rounded-full bg-emerald-600 text-white flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5">✓</div>
+              <p class="text-sm text-slate-700"><strong>El Buen Vivir:</strong> armonía personal, familiar, comunitaria y cósmica que rechaza el consumismo voraz e individualista (n. 71).</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Interactive Graphic / Map Info -->
+        <div class="lg:col-span-6">
+          <div class="bg-gradient-to-br from-[#062319] to-[#0e4e43] text-white p-8 rounded-3xl shadow-xl border border-emerald-700/40 relative">
+            <div class="flex items-center justify-between mb-6">
+              <span class="text-xs uppercase font-bold tracking-widest text-amber-400">Radiografía del Bioma</span>
+              <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-full border border-emerald-400/30">Ecología Integral</span>
+            </div>
+
+            <div class="space-y-4">
+              <!-- Point 1 -->
+              <div class="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+                <div class="flex items-center gap-3 mb-1">
+                  <i data-lucide="waves" class="w-5 h-5 text-teal-400"></i>
+                  <h4 class="font-bold text-white text-base">La Columna Vertebral de Agua</h4>
+                </div>
+                <p class="text-xs text-slate-300">
+                  El río Amazonas y sus afluentes no son barreras sino lazos que unen pueblos, lenguas y culturas. En la selva, el agua determina el ritmo de toda existencia (n. 43-45).
+                </p>
+              </div>
+
+              <!-- Point 2 -->
+              <div class="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+                <div class="flex items-center gap-3 mb-1">
+                  <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-400"></i>
+                  <h4 class="font-bold text-white text-base">Injusticia y Crimen Ambiental</h4>
+                </div>
+                <p class="text-xs text-slate-300">
+                  Explotación petrolera, minera y maderera ilegal que envenena ríos y desaloja a los habitantes hacia las periferias urbanas de extrema miseria (n. 9-11).
+                </p>
+              </div>
+
+              <!-- Point 3 -->
+              <div class="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+                <div class="flex items-center gap-3 mb-1">
+                  <i data-lucide="heart-handshake" class="w-5 h-5 text-rose-400"></i>
+                  <h4 class="font-bold text-white text-base">Protagonismo sin Paternalismo</h4>
+                </div>
+                <p class="text-xs text-slate-300">
+                  Los pueblos originarios no son convidados de piedra: deben ser los <strong>principales interlocutores</strong> con derecho a consentimiento previo, libre e informado (n. 26).
+                </p>
+              </div>
+            </div>
+
+            <div class="mt-6 p-4 rounded-xl bg-emerald-950/60 border border-emerald-500/30 text-center">
+              <span class="text-xs text-emerald-200">«Abusar de la naturaleza es abusar de los ancestros, de los hermanos y hermanas, de la creación y del Creador»</span>
+              <span class="block text-[11px] text-amber-300 font-semibold mt-1">— Querida Amazonia, n. 42</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION: LOS CUATRO GRANDES SUEÑOS (NÚCLEO PRINCIPAL) -->
+  <section id="suenos" class="py-24 bg-[#0a2f22] text-white relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold uppercase tracking-widest text-amber-400 bg-amber-500/10 border border-amber-500/30 px-3.5 py-1 rounded-full inline-block mb-3">
+          El Núcleo del Mensaje Papal
+        </span>
+        <h2 class="text-3xl sm:text-5xl font-extrabold font-serif text-white tracking-tight">
+          Los Cuatro Grandes Sueños
+        </h2>
+        <p class="mt-4 text-emerald-100/80 text-base sm:text-lg">
+          Francisco estructura la exhortación en torno a cuatro dimensiones inseparables que unen ecología, justicia social, riqueza cultural y la misión de la Iglesia.
+        </p>
+      </div>
+
+      <!-- Interactive Dream Switcher Tabs -->
+      <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-12" id="dreamTabs">
+        <button onclick="cambiarSueno('social')" id="tab-social" class="sueno-tab active px-5 py-3 rounded-2xl font-semibold text-sm transition flex items-center gap-2.5 bg-blue-600 text-white shadow-lg shadow-blue-900/50">
+          <i data-lucide="shield-alert" class="w-4 h-4"></i>
+          <span>1. Sueño Social</span>
+        </button>
+        <button onclick="cambiarSueno('cultural')" id="tab-cultural" class="sueno-tab px-5 py-3 rounded-2xl font-semibold text-sm transition flex items-center gap-2.5 bg-white/10 hover:bg-white/15 text-slate-300 border border-white/10">
+          <i data-lucide="palette" class="w-4 h-4"></i>
+          <span>2. Sueño Cultural</span>
+        </button>
+        <button onclick="cambiarSueno('ecologico')" id="tab-ecologico" class="sueno-tab px-5 py-3 rounded-2xl font-semibold text-sm transition flex items-center gap-2.5 bg-white/10 hover:bg-white/15 text-slate-300 border border-white/10">
+          <i data-lucide="sprout" class="w-4 h-4"></i>
+          <span>3. Sueño Ecológico</span>
+        </button>
+        <button onclick="cambiarSueno('eclesial')" id="tab-eclesial" class="sueno-tab px-5 py-3 rounded-2xl font-semibold text-sm transition flex items-center gap-2.5 bg-white/10 hover:bg-white/15 text-slate-300 border border-white/10">
+          <i data-lucide="church" class="w-4 h-4"></i>
+          <span>4. Sueño Eclesial</span>
+        </button>
+      </div>
+
+      <!-- DREAM 1: SOCIAL -->
+      <div id="content-social" class="sueno-content block transition-all duration-500">
+        <div class="bg-gradient-to-br from-[#0c382b] to-[#07241b] rounded-3xl p-6 sm:p-10 lg:p-12 border border-blue-500/30 shadow-2xl">
+          
+          <div class="flex flex-col lg:flex-row gap-8 items-start justify-between pb-8 border-b border-emerald-800/60">
+            <div>
+              <span class="text-xs uppercase font-bold tracking-widest text-blue-400 bg-blue-500/20 px-3 py-1 rounded-full border border-blue-400/30">
+                Capítulo Primero • Numerales 8 al 27
+              </span>
+              <h3 class="text-2xl sm:text-4xl font-bold font-serif text-white mt-3">
+                «Un Sueño Social: Por los derechos de los más pobres y los pueblos originarios»
+              </h3>
+              <p class="text-slate-300 text-sm sm:text-base mt-2 max-w-3xl">
+                Cualquier planteo ecológico verdadero debe ser inseparablemente un planteo social. No sirve un conservacionismo que preserve los árboles ignorando a los seres humanos que allí sufren.
+              </p>
+            </div>
+            
+            <div class="bg-blue-950/60 border border-blue-500/30 p-4 rounded-2xl text-center min-w-[200px] flex-shrink-0">
+              <span class="text-xs text-blue-300 block font-medium">Clave Sinodal</span>
+              <span class="text-lg font-bold text-white">«Injusticia y Crimen»</span>
+              <span class="text-xs text-slate-400 block mt-1">Llamar a las cosas por su nombre</span>
+            </div>
+          </div>
+
+          <!-- 4 Pillars of Social Dream -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+            
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-blue-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center mb-4">
+                <i data-lucide="flame" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">Injusticia y Crimen</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Denuncia la explotación maderera, petrolera y minera (legal e ilegal) que expulsa a las familias de sus tierras ancestrales en nombre del lucro fácil.
+              </p>
+            </div>
+
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-blue-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center mb-4">
+                <i data-lucide="building-2" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">Nuevas Esclavitudes</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Al ser despojados, los indígenas migran a las periferias urbanas donde enfrentan desarraigo, discriminación, xenofobia, trata de personas y explotación laboral.
+              </p>
+            </div>
+
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-blue-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center mb-4">
+                <i data-lucide="heart-crack" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">Sana Indignación & Perdón</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                El Papa exige no anestesiar la conciencia y pide perdón por los crímenes cometidos contra los pueblos originarios, incluso los perpetrados históricamente por miembros de la Iglesia.
+              </p>
+            </div>
+
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-blue-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center mb-4">
+                <i data-lucide="message-square" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">Diálogo Social Protagónico</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Los pueblos indígenas deben ser los principales interlocutores de toda política pública, respetando su propia visión comunitaria y ancestral del "Buen Vivir".
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Document Quote -->
+          <div class="mt-8 bg-blue-950/40 p-6 rounded-2xl border border-blue-500/30 flex flex-col sm:flex-row items-center gap-5">
+            <i data-lucide="quote" class="w-10 h-10 text-blue-400 flex-shrink-0"></i>
+            <div class="text-sm italic text-blue-100">
+              «Somos una región de territorios robados... Las empresas entran a explotar el bosque mientras nosotros lo cuidamos para nuestros hijos. Tenemos la carne, la pesca y las frutas.»
+              <span class="block text-xs font-bold text-amber-300 not-italic mt-1">— Testimonio recogido en el Sínodo (Querida Amazonia, n. 11)</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- DREAM 2: CULTURAL -->
+      <div id="content-cultural" class="sueno-content hidden transition-all duration-500">
+        <div class="bg-gradient-to-br from-[#0c382b] to-[#07241b] rounded-3xl p-6 sm:p-10 lg:p-12 border border-amber-500/30 shadow-2xl">
+          
+          <div class="flex flex-col lg:flex-row gap-8 items-start justify-between pb-8 border-b border-emerald-800/60">
+            <div>
+              <span class="text-xs uppercase font-bold tracking-widest text-amber-400 bg-amber-500/20 px-3 py-1 rounded-full border border-amber-400/30">
+                Capítulo Segundo • Numerales 28 al 40
+              </span>
+              <h3 class="text-2xl sm:text-4xl font-bold font-serif text-white mt-3">
+                «Un Sueño Cultural: Preservar el Poliedro Amazónico»
+              </h3>
+              <p class="text-slate-300 text-sm sm:text-base mt-2 max-w-3xl">
+                Cuidar la Amazonia no es solo salvar árboles y animales; es custodiar las culturas milenarias, las lenguas, los mitos y la sabiduría transmitida por los ancianos.
+              </p>
+            </div>
+            
+            <div class="bg-amber-950/60 border border-amber-500/30 p-4 rounded-2xl text-center min-w-[200px] flex-shrink-0">
+              <span class="text-xs text-amber-300 block font-medium">Clave Sinodal</span>
+              <span class="text-lg font-bold text-white">«Cultivar sin Desarraigar»</span>
+              <span class="text-xs text-slate-400 block mt-1">Contra la colonización cultural</span>
+            </div>
+          </div>
+
+          <!-- 4 Pillars of Cultural Dream -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+            
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-amber-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-4">
+                <i data-lucide="layers" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">El Poliedro Amazónico</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                La riqueza de la Amazonia reside en su pluralidad: miles de comunidades diversas y más de 110 pueblos en aislamiento voluntario que no deben ser forzados a homogeneizarse.
+              </p>
+            </div>
+
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-amber-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-4">
+                <i data-lucide="trees" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">Cuidar las Raíces</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                El consumismo globalizado intenta convertir a los jóvenes en seres manipulables en serie. Francisco pide volver a escuchar a los ancianos y sus narraciones ancestrales.
+              </p>
+            </div>
+
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-amber-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-4">
+                <i data-lucide="book-heart" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">Cultivar sin Desarraigar</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                El progreso educativo no debe consistir en imponer pautas occidentales, sino en empoderar a las comunidades para que desarrollen lo mejor de su propia identidad.
+              </p>
+            </div>
+
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-amber-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-4">
+                <i data-lucide="git-merge" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">Encuentro Intercultural</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                No propone un indigenismo estático o cerrado, sino un diálogo fecundo donde las diferencias sean puentes y ambas culturas se enriquezcan mutuamente.
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Document Quote -->
+          <div class="mt-8 bg-amber-950/40 p-6 rounded-2xl border border-amber-500/30 flex flex-col sm:flex-row items-center gap-5">
+            <i data-lucide="quote" class="w-10 h-10 text-amber-400 flex-shrink-0"></i>
+            <div class="text-sm italic text-amber-100">
+              «Del río haz tu sangre [...] Luego plántate, germina y crece, que tu raíz se aferre a la tierra por siempre jamás...»
+              <span class="block text-xs font-bold text-amber-300 not-italic mt-1">— Poeta peruano Javier Yglesias (citado en el n. 31)</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- DREAM 3: ECOLÓGICO -->
+      <div id="content-ecologico" class="sueno-content hidden transition-all duration-500">
+        <div class="bg-gradient-to-br from-[#0c382b] to-[#07241b] rounded-3xl p-6 sm:p-10 lg:p-12 border border-emerald-500/40 shadow-2xl">
+          
+          <div class="flex flex-col lg:flex-row gap-8 items-start justify-between pb-8 border-b border-emerald-800/60">
+            <div>
+              <span class="text-xs uppercase font-bold tracking-widest text-emerald-400 bg-emerald-500/20 px-3 py-1 rounded-full border border-emerald-400/30">
+                Capítulo Tercero • Numerales 41 al 60
+              </span>
+              <h3 class="text-2xl sm:text-4xl font-bold font-serif text-white mt-3">
+                «Un Sueño Ecológico: Custodiar la abrumadora hermosura de la creación»
+              </h3>
+              <p class="text-slate-300 text-sm sm:text-base mt-2 max-w-3xl">
+                La existencia amazónica es cósmica: el cuidado de las personas y de los ecosistemas es inalienable. La selva no es un almacén de materias primas, sino un ser vivo con quien relacionarse.
+              </p>
+            </div>
+            
+            <div class="bg-emerald-950/60 border border-emerald-500/30 p-4 rounded-2xl text-center min-w-[200px] flex-shrink-0">
+              <span class="text-xs text-emerald-300 block font-medium">Clave Sinodal</span>
+              <span class="text-lg font-bold text-white">«Todo está conectado»</span>
+              <span class="text-xs text-slate-400 block mt-1">El agua como arteria vital</span>
+            </div>
+          </div>
+
+          <!-- 4 Pillars of Ecological Dream -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+            
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-emerald-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4">
+                <i data-lucide="droplet" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">Sueño Hecho de Agua</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                El Amazonas es columna vertebral que une pueblos. El agua deslumbra, fertiliza tierras y océanos lejanos, y regula los ciclos de lluvias de toda Sudamérica y el mundo.
+              </p>
+            </div>
+
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-emerald-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4">
+                <i data-lucide="volume-2" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">El Grito de la Selva</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                La deforestación provoca desertificación y pérdida masiva de especies irrecuperables. El bioma amazónico es un filtro crucial de CO2 para estabilizar el calentamiento global.
+              </p>
+            </div>
+
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-emerald-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4">
+                <i data-lucide="eye" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">Profecía de Contemplación</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Superar la mirada tecnocrática rapaz. Aprender a contemplar la naturaleza con amor y reverencia sagrada, descubriendo en ella la presencia luminosa del Creador.
+              </p>
+            </div>
+
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-emerald-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4">
+                <i data-lucide="recycle" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">Hábitos y Sobriedad</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                No bastan las leyes ni la técnica: urge cambiar los hábitos humanos, combatiendo la cultura del descarte y el consumismo voraz con una feliz sobriedad fraterna.
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Document Quote -->
+          <div class="mt-8 bg-emerald-950/40 p-6 rounded-2xl border border-emerald-500/30 flex flex-col sm:flex-row items-center gap-5">
+            <i data-lucide="quote" class="w-10 h-10 text-emerald-400 flex-shrink-0"></i>
+            <div class="text-sm italic text-emerald-100">
+              «El río es una vena delgadita en la cara de la tierra... El río es una cuerda de donde se agarran los animales y los árboles. Si lo jalan muy duro, el río podría reventarse.»
+              <span class="block text-xs font-bold text-amber-300 not-italic mt-1">— Poeta Juan Carlos Galeano (citado en el n. 47)</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- DREAM 4: ECLESIAL -->
+      <div id="content-eclesial" class="sueno-content hidden transition-all duration-500">
+        <div class="bg-gradient-to-br from-[#0c382b] to-[#07241b] rounded-3xl p-6 sm:p-10 lg:p-12 border border-purple-500/30 shadow-2xl">
+          
+          <div class="flex flex-col lg:flex-row gap-8 items-start justify-between pb-8 border-b border-emerald-800/60">
+            <div>
+              <span class="text-xs uppercase font-bold tracking-widest text-purple-400 bg-purple-500/20 px-3 py-1 rounded-full border border-purple-400/30">
+                Capítulo Cuarto • Numerales 61 al 110
+              </span>
+              <h3 class="text-2xl sm:text-4xl font-bold font-serif text-white mt-3">
+                «Un Sueño Eclesial: Comunidades con rostro amazónico»
+              </h3>
+              <p class="text-slate-300 text-sm sm:text-base mt-2 max-w-3xl">
+                La Iglesia no llega a imponer una cultura uniforme europea, sino a encarnar el Evangelio reconociendo la sabiduría ancestral, dando protagonismo a los laicos y a las mujeres.
+              </p>
+            </div>
+            
+            <div class="bg-purple-950/60 border border-purple-500/30 p-4 rounded-2xl text-center min-w-[200px] flex-shrink-0">
+              <span class="text-xs text-purple-300 block font-medium">Clave Sinodal</span>
+              <span class="text-lg font-bold text-white">«Inculturación Viva»</span>
+              <span class="text-xs text-slate-400 block mt-1">La fuerza de las mujeres</span>
+            </div>
+          </div>
+
+          <!-- 4 Pillars of Ecclesial Dream -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+            
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-purple-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-4">
+                <i data-lucide="globe" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">Inculturación del Evangelio</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                El cristianismo no tiene una sola cultura. La fe asume los mitos, ritos y cantos de los pueblos, elevando la naturaleza como mediación de la gracia sacramental.
+              </p>
+            </div>
+
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-purple-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-4">
+                <i data-lucide="cup-soda" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">Eucaristía sin Aduanas</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                La Eucaristía edifica la Iglesia y no debe negarse a los más pobres por distancias geográficas ni disciplinas rígidas que actúen como una "aduana pastoral".
+              </p>
+            </div>
+
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-purple-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-4">
+                <i data-lucide="crown" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">El Liderazgo de las Mujeres</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Homenaje histórico: durante décadas sin sacerdotes, fueron mujeres quienes sostuvieron la fe viva. Francisco pide funciones estables y liderazgo decisorio para ellas.
+              </p>
+            </div>
+
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:border-purple-400/40 transition">
+              <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-4">
+                <i data-lucide="users-2" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-2">Protagonismo Laical</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Fomento decidido de ministerios laicales con autoridad propia, más diáconos permanentes y equipos misioneros itinerantes adaptados a la movilidad del río.
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Document Quote -->
+          <div class="mt-8 bg-purple-950/40 p-6 rounded-2xl border border-purple-500/30 flex flex-col sm:flex-row items-center gap-5">
+            <i data-lucide="quote" class="w-10 h-10 text-purple-400 flex-shrink-0"></i>
+            <div class="text-sm italic text-purple-100">
+              «Sin las mujeres la Iglesia en la Amazonia se derrumba... Ellas mantuvieron encendida la llama de la fe con admirable entrega durante décadas.»
+              <span class="block text-xs font-bold text-amber-300 not-italic mt-1">— Papa Francisco (Querida Amazonia, n. 99-101)</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION: POESÍA Y VOCES AMAZÓNICAS (El Alma Sensible del Documento) -->
+  <section id="poesia" class="py-20 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full inline-block mb-3">
+          Sensibilidad Literaria
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-bold font-serif text-slate-900">
+          La Poesía como Voz Profética
+        </h2>
+        <p class="mt-4 text-slate-600 text-base sm:text-lg">
+          Un rasgo extraordinario de <em>Querida Amazonia</em> es que el Papa Francisco recurre constantemente a la poesía popular e indígena para tocar las fibras humanas más profundas.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Poem 1: Neruda -->
+        <div class="card-hover-lift bg-gradient-to-b from-[#f8faf9] to-[#edf6f2] p-8 rounded-3xl border border-emerald-200/80 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold text-emerald-700 uppercase tracking-widest">Pablo Neruda</span>
+              <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-mono">Nota 54</span>
+            </div>
+            <p class="font-serif italic text-slate-800 text-base sm:text-lg leading-relaxed mb-6">
+              «Amazonas, <br>
+              capital de las sílabas del agua, <br>
+              padre patriarca, eres <br>
+              la eternidad secreta <br>
+              de las fecundaciones, <br>
+              te caen ríos como aves…»
+            </p>
+          </div>
+          <div class="pt-4 border-t border-emerald-200/60 text-xs text-slate-500">
+            <strong>Canto General (1938)</strong> • Celebra la inmensidad vivificante del agua como generadora sagrada de vida en el continente.
+          </div>
+        </div>
+
+        <!-- Poem 2: Galeano -->
+        <div class="card-hover-lift bg-gradient-to-b from-[#f8faf9] to-[#fbf7ed] p-8 rounded-3xl border border-amber-200/80 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold text-amber-700 uppercase tracking-widest">Juan Carlos Galeano</span>
+              <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-mono">Nota 58</span>
+            </div>
+            <p class="font-serif italic text-slate-800 text-base sm:text-lg leading-relaxed mb-6">
+              «Los que creyeron que el río era un lazo para jugar se equivocaron. <br>
+              El río es una vena delgadita en la cara de la tierra... <br>
+              Si lo jalan muy duro, el río podría reventarse y lavarnos la cara con agua y con sangre.»
+            </p>
+          </div>
+          <div class="pt-4 border-t border-amber-200/60 text-xs text-slate-500">
+            <strong>Amazonia y otros poemas</strong> • Alerta lírica sobre los límites infranqueables del ecosistema ante la codicia extractiva.
+          </div>
+        </div>
+
+        <!-- Poem 3: Pedro Casaldáliga -->
+        <div class="card-hover-lift bg-gradient-to-b from-[#f8faf9] to-[#f0f9ff] p-8 rounded-3xl border border-blue-200/80 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold text-blue-700 uppercase tracking-widest">Pedro Casaldáliga</span>
+              <span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-mono">Nota 104</span>
+            </div>
+            <p class="font-serif italic text-slate-800 text-base sm:text-lg leading-relaxed mb-6">
+              «Flotan sombras de mí, maderas muertas. <br>
+              Pero la estrella nace sin reproche <br>
+              sobre las manos de este niño, expertas, <br>
+              que conquistan las aguas y la noche...»
+            </p>
+          </div>
+          <div class="pt-4 border-t border-blue-200/60 text-xs text-slate-500">
+            <strong>Carta de navegar (Tocantins)</strong> • Esperanza mística del obispo poeta defensor de los pueblos indígenas del Araguaia.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION: MADRE DE LA AMAZONIA (CONCLUSIÓN MARIANA) -->
+  <section id="maria" class="py-20 bg-gradient-to-b from-white to-[#edf6f2]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="bg-gradient-to-br from-[#062319] via-[#093527] to-[#0d4432] rounded-3xl p-8 sm:p-12 lg:p-16 text-white shadow-2xl relative overflow-hidden border border-emerald-500/30">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          
+          <div class="lg:col-span-7 space-y-6">
+            <span class="text-xs uppercase font-bold tracking-widest text-amber-400 bg-amber-500/20 px-3.5 py-1 rounded-full border border-amber-400/30">
+              Conclusión del Papa Francisco • Numeral 111
+            </span>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif leading-tight">
+              María: Madre de la Amazonia
+            </h2>
+            <p class="text-emerald-100/90 text-sm sm:text-base leading-relaxed">
+              El Papa Francisco culmina el documento elevando una oración poética y sentida a la Virgen María. Reconoce que el camino mariano ha sido el puente histórico y maternal más hondo para el encuentro de los pueblos indígenas con Jesucristo.
+            </p>
+
+            <div class="bg-white/10 p-6 rounded-2xl border border-white/15 backdrop-blur-sm space-y-4">
+              <h4 class="font-serif text-lg font-bold text-amber-300 flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-5 h-5"></i> Peticiones centrales de la Oración:
+              </h4>
+              <ul class="text-xs sm:text-sm text-slate-200 space-y-2.5">
+                <li class="flex items-start gap-2">
+                  <span class="text-amber-400 font-bold">•</span>
+                  <span><strong>Reina en el corazón palpitante:</strong> Que se manifieste en la belleza de las flores, los ríos y todo lo que vibra en sus selvas.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-amber-400 font-bold">•</span>
+                  <span><strong>Toca a los poderosos:</strong> Para detener la destrucción y defender a los más pobres cuyos hogares son arrasados.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-amber-400 font-bold">•</span>
+                  <span><strong>Que nadie se sienta dueño:</strong> Recordar al ser humano que la creación es obra sagrada de Dios y no objeto de lucro egoísta.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="pt-2">
+              <button onclick="mostrarOracionCompleta()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-6 py-3 rounded-xl transition shadow-lg shadow-amber-500/20 flex items-center gap-2 text-sm">
+                <i data-lucide="book-open" class="w-4 h-4"></i>
+                <span>Leer la Oración Final Completa</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="w-full max-w-sm bg-white/5 p-6 rounded-3xl border border-white/10 backdrop-blur-md text-center">
+              <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 text-slate-950 flex items-center justify-center mb-4 shadow-xl">
+                <i data-lucide="sun" class="w-10 h-10 text-amber-900"></i>
+              </div>
+              <h3 class="font-serif text-xl font-bold text-white">Llamado al Compromiso</h3>
+              <p class="text-xs text-emerald-200/80 mt-2 mb-6">
+                «Querida Amazonia es una invitación a toda la humanidad para transformar el modelo de desarrollo por uno que integre la justicia social, la diversidad cultural y el cuidado de la Casa Común.»
+              </p>
+              
+              <div class="p-3 bg-emerald-950/80 rounded-xl border border-emerald-500/30 text-xs text-amber-300 font-medium">
+                Humanística IV • Stand 2026
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION: TRIVIA INTERACTIVA PARA EL VISITANTE DEL STAND -->
+  <section id="trivia" class="py-24 bg-white border-b border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-12">
+        <span class="text-xs font-bold uppercase tracking-widest text-amber-800 bg-amber-100 px-3.5 py-1 rounded-full inline-block mb-3">
+          Participá en el Stand
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-bold font-serif text-slate-900">
+          Trivia Interactiva: ¿Cuánto aprendiste sobre Querida Amazonia?
+        </h2>
+        <p class="mt-3 text-slate-600 text-sm sm:text-base">
+          Desafiá tus conocimientos respondiendo estas 4 preguntas rápidas basadas en el documento y participá de la experiencia de nuestro stand.
+        </p>
+      </div>
+
+      <!-- Trivia Container Box -->
+      <div id="triviaContainer" class="bg-gradient-to-b from-[#f8faf9] to-[#edf6f2] p-6 sm:p-10 rounded-3xl border border-emerald-200 shadow-xl">
+        
+        <!-- Progress bar -->
+        <div class="flex items-center justify-between text-xs font-semibold text-emerald-800 mb-2">
+          <span id="triviaProgressText">Pregunta 1 de 4</span>
+          <span id="triviaScoreText">Puntos: 0</span>
+        </div>
+        <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden mb-8">
+          <div id="triviaProgressBar" class="bg-gradient-to-r from-emerald-500 to-amber-500 h-full transition-all duration-300 w-1/4"></div>
+        </div>
+
+        <!-- Question Title -->
+        <h3 id="triviaQuestionTitle" class="text-xl sm:text-2xl font-bold font-serif text-slate-900 mb-6">
+          ¿En qué año publicó el Papa Francisco la Exhortación Apostólica Postsinodal «Querida Amazonia»?
+        </h3>
+
+        <!-- Options Container -->
+        <div id="triviaOptions" class="space-y-3 mb-8">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Feedback & Next Button -->
+        <div id="triviaFeedback" class="hidden p-4 rounded-2xl mb-6 text-sm"></div>
+
+        <div class="flex items-center justify-between pt-4 border-t border-emerald-200">
+          <button onclick="reiniciarTrivia()" class="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reiniciar
+          </button>
+          
+          <button id="triviaNextBtn" onclick="siguientePreguntaTrivia()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-xl transition text-sm flex items-center gap-2">
+            <span>Siguiente</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION: MURO DE COMPROMISOS / REFLEXIÓN DEL VISITANTE -->
+  <section id="compromiso" class="py-20 bg-gradient-to-b from-[#edf6f2] to-white border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs font-bold uppercase tracking-widest text-emerald-800 bg-emerald-200/70 px-3 py-1 rounded-full inline-block mb-3">
+          Comunidad del Stand
+        </span>
+        <h2 class="text-3xl font-bold font-serif text-slate-900">
+          Muro de Compromisos por la Casa Común
+        </h2>
+        <p class="mt-3 text-slate-600 text-sm">
+          Como nos invita el Papa, cuidar el planeta empieza por nuevos hábitos. Dejá tu mensaje o compromiso en nuestro stand interactivo:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Form to add commitment -->
+        <div class="lg:col-span-5 bg-white p-6 rounded-3xl border border-emerald-100 shadow-md">
+          <h3 class="text-lg font-bold font-serif text-slate-900 mb-4 flex items-center gap-2">
+            <i data-lucide="pen-tool" class="w-5 h-5 text-emerald-600"></i>
+            Sumá tu compromiso
+          </h3>
+          <form id="compromisoForm" onsubmit="agregarCompromiso(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Tu Nombre o Apodo:</label>
+              <input type="text" id="nombreCompromiso" required placeholder="Ej: Valentina M." class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Tu compromiso o reflexión:</label>
+              <textarea id="textoCompromiso" required rows="3" placeholder="Ej: Reducir el consumo de plásticos y apoyar el comercio justo con nuestros pueblos originarios." class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm"></textarea>
+            </div>
+
+            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-md shadow-emerald-700/20">
+              <i data-lucide="send" class="w-4 h-4"></i>
+              Publicar en el Stand
+            </button>
+          </form>
+        </div>
+
+        <!-- Feed of commitments -->
+        <div class="lg:col-span-7">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Reflexiones de los visitantes</span>
+            <span id="totalCompromisos" class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">4 compromisos</span>
+          </div>
+
+          <div id="listaCompromisos" class="space-y-3 max-h-[380px] overflow-y-auto pr-2">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MODAL: DETALLE DEL SUEÑO (ABIERTO DESDE GUÍA RÁPIDA - IDÉNTICO A ESCANEAR QR) -->
+  <div id="modalSuenoDetalle" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-slate-200 animate-in fade-in zoom-in duration-200">
+      
+      <button onclick="cerrarModalSueno()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 p-2 rounded-full hover:bg-slate-100 transition" title="Cerrar ventana">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Icono central dinámico -->
+      <div id="modalSuenoIconContainer" class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-4 shadow-md transition-colors">
+        <!-- Inyectado por JS -->
+      </div>
+
+      <!-- Título y Badge -->
+      <div class="text-center mb-4">
+        <span id="modalSuenoBadge" class="text-xs uppercase font-bold tracking-widest px-3 py-1 rounded-full inline-block mb-1.5"></span>
+        <h3 id="modalSuenoTitulo" class="text-2xl font-bold font-serif text-slate-900 leading-tight"></h3>
+      </div>
+
+      <!-- Cita del Papa Francisco -->
+      <div id="modalSuenoCitaContainer" class="p-3.5 rounded-2xl mb-4 text-xs sm:text-sm italic font-serif leading-relaxed text-center border">
+        <p id="modalSuenoCita"></p>
+      </div>
+
+      <!-- Puntos clave del documento -->
+      <div class="mb-6 space-y-2">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Puntos Clave de la Exhortación:</h4>
+        <ul id="modalSuenoPuntos" class="text-xs sm:text-sm text-slate-700 space-y-2 list-disc pl-5 leading-relaxed">
+          <!-- Inyectado por JS -->
+        </ul>
+      </div>
+
+      <!-- Botón de Acción Principal -->
+      <div class="pt-3 border-t border-slate-100">
+        <button onclick="irDesdeModalAlCapitulo()" class="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-bold py-3.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-md shadow-emerald-700/20">
+          <span>Ver sección completa en la página</span>
+          <i data-lucide="arrow-down" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: CÓDIGO QR PARA ESCANEAR EN EL STAND -->
+  <div id="modalQR" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl relative text-center border border-slate-200 animate-in fade-in zoom-in duration-200">
+      
+      <button onclick="cerrarModalQR()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 p-2 rounded-full hover:bg-slate-100">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="w-12 h-12 mx-auto rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-4">
+        <i data-lucide="smartphone" class="w-6 h-6"></i>
+      </div>
+
+      <h3 class="text-2xl font-bold font-serif text-slate-900 mb-1">¡Llevate la web al celular!</h3>
+      <p class="text-xs text-slate-500 mb-6">Escaneá este código QR en el stand con la cámara de tu teléfono para leer el documento y los 4 sueños en cualquier momento.</p>
+
+      <div class="bg-emerald-50 p-6 rounded-2xl inline-block border border-emerald-200 shadow-inner mb-6">
+        <div id="qrcode" class="flex justify-center"></div>
+      </div>
+
+      <p class="text-xs text-slate-400 font-mono break-all" id="currentUrlText"></p>
+    </div>
+  </div>
+
+  <!-- MODAL: RESUMEN ANALÍTICO COMPLETO (PDF SINTETIZADO) -->
+  <div id="modalResumen" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl relative border border-slate-200 animate-in fade-in zoom-in duration-200">
+      
+      <!-- Header -->
+      <div class="p-6 border-b border-slate-200 flex items-center justify-between bg-[#f8faf9] rounded-t-3xl">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-700 flex items-center justify-center">
+            <i data-lucide="file-text" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold font-serif text-slate-900">Resumen Analítico Oficial</h3>
+            <p class="text-xs text-slate-500">Los Cuatro Sueños del Papa Francisco en «Querida Amazonia»</p>
+          </div>
+        </div>
+        <button onclick="toggleResumenModal()" class="text-slate-400 hover:text-slate-700 p-2 rounded-full hover:bg-slate-200/60">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Body Content (Scrollable) -->
+      <div class="p-6 sm:p-8 overflow-y-auto space-y-6 text-slate-700 text-sm leading-relaxed">
+        
+        <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 text-xs text-emerald-900">
+          <strong>Contexto General:</strong> Publicada en febrero de 2020 por el Papa Francisco, recoge las reflexiones del Sínodo de los Obispos sobre la región Panamazónica. Lejos de ser un documento interno, es un llamado a toda la humanidad para salvar un bioma vital y proteger a las personas que lo habitan.
+        </div>
+
+        <div>
+          <h4 class="font-serif text-lg font-bold text-slate-900 text-blue-900 mb-2 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">1</span>
+            Sueño Social (Justicia y Reparación)
+          </h4>
+          <ul class="list-disc pl-5 space-y-1.5 text-xs sm:text-sm">
+            <li><strong>Injusticia y crimen:</strong> Se denuncia fuertemente la explotación maderera, petrolera y minera (legal e ilegal) que arrasa con selvas y ríos expulsando comunidades originarias.</li>
+            <li><strong>Migración y nuevas esclavitudes:</strong> Al perder sus tierras, los indígenas migran a periferias urbanas con miseria, desarraigo, discriminación y trata de personas.</li>
+            <li><strong>Sana indignación y perdón:</strong> No anestesiar la conciencia. Francisco reitera el pedido de perdón por los crímenes cometidos incluso por miembros de la Iglesia.</li>
+            <li><strong>Diálogo social protagónico:</strong> Los pueblos originarios deben ser los principales interlocutores, respetando su visión del "buen vivir" y solicitando su consentimiento previo e informado.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-serif text-lg font-bold text-slate-900 text-amber-900 mb-2 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-bold">2</span>
+            Sueño Cultural (Identidad y Raíces)
+          </h4>
+          <ul class="list-disc pl-5 space-y-1.5 text-xs sm:text-sm">
+            <li><strong>El poliedro amazónico:</strong> Preservar la inmensa diversidad de pueblos, incluyendo las más de 110 tribus en aislamiento voluntario (PIAV).</li>
+            <li><strong>Cuidar las raíces:</strong> Evitar la homogeneización consumista que vuelve manipulables a los jóvenes; revalorizar las historias y relatos de los ancianos.</li>
+            <li><strong>Cultivar sin desarraigar:</strong> El desarrollo y la educación deben fortalecer la identidad originaria sin constituir una colonización cultural.</li>
+            <li><strong>Encuentro intercultural:</strong> Las diferencias son puentes de diálogo; no un indigenismo cerrado, sino un mestizaje enriquecedor mutuo.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-serif text-lg font-bold text-slate-900 text-emerald-900 mb-2 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">3</span>
+            Sueño Ecológico (La Casa Común)
+          </h4>
+          <ul class="list-disc pl-5 space-y-1.5 text-xs sm:text-sm">
+            <li><strong>El grito de la Amazonia:</strong> Su suelo es frágil; talarlo desertifica. Su salud impacta en las lluvias y el clima de todo el planeta.</li>
+            <li><strong>Profecía de la contemplación:</strong> Aprender de los pueblos originarios a amar y contemplar la selva, superando el modelo del mero saqueo extractivo.</li>
+            <li><strong>Hábitos y educación ecológica:</strong> Frenar la cultura del descarte y adoptar un estilo de vida sobrio, sereno y fraterno.</li>
+            <li><strong>El río como columna vertebral:</strong> «El río no nos separa, nos une, nos ayuda a convivir entre diferentes culturas y lenguas».</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-serif text-lg font-bold text-slate-900 text-purple-900 mb-2 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold">4</span>
+            Sueño Eclesial (Una Iglesia con Rostro Amazónico)
+          </h4>
+          <ul class="list-disc pl-5 space-y-1.5 text-xs sm:text-sm">
+            <li><strong>Inculturación del Evangelio:</strong> Adaptar el mensaje y la liturgia a las expresiones indígenas (ritos, danzas, cantos) sin tacharlas apresuradamente de superstición.</li>
+            <li><strong>Liturgia y Sacramentos:</strong> Deben ser accesibles para los pobres y nunca negarse por dinero ni rigideces de aduana eclesial.</li>
+            <li><strong>Nuevos ministerios y Eucaristía:</strong> Superar la escasez sacerdotal fortaleciendo el diaconado permanente y el protagonismo de líderes laicos.</li>
+            <li><strong>La fuerza de las mujeres:</strong> Reconocimiento vital: fueron las mujeres quienes mantuvieron la Iglesia en pie durante décadas; deben tener cargos estables y decisión sin clericalizarlas.</li>
+          </ul>
+        </div>
+
+        <div class="pt-4 border-t border-slate-200">
+          <h4 class="font-serif font-bold text-slate-900 mb-1">Conclusión: Madre de la Amazonia</h4>
+          <p class="text-xs">
+            Francisco culmina elevando una plegaria a María, pidiendo que reine en el corazón de las selvas y ríos, toque el corazón de los poderosos y proteja a los pobres amenazados por intereses mezquinos.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="p-4 border-t border-slate-200 bg-[#f8faf9] flex items-center justify-between rounded-b-3xl">
+        <button onclick="window.print()" class="text-xs font-bold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-slate-200/60 transition">
+          <i data-lucide="printer" class="w-4 h-4"></i> Imprimir o Guardar PDF
+        </button>
+        <button onclick="toggleResumenModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-5 py-2 rounded-xl text-xs transition">
+          Entendido
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: ORACIÓN COMPLETA A MARÍA -->
+  <div id="modalOracion" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-gradient-to-b from-[#062319] to-[#0a3526] text-white rounded-3xl max-w-lg w-full p-8 shadow-2xl relative border border-emerald-500/40 animate-in fade-in zoom-in duration-200">
+      
+      <button onclick="cerrarOracionModal()" class="absolute top-4 right-4 text-emerald-300 hover:text-white p-2 rounded-full hover:bg-emerald-800/40">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="text-center mb-6">
+        <span class="text-xs font-bold uppercase tracking-widest text-amber-400">Oración del Papa Francisco</span>
+        <h3 class="text-2xl font-bold font-serif text-white mt-1">Madre de la Amazonia</h3>
+      </div>
+
+      <div class="max-h-[60vh] overflow-y-auto pr-2 space-y-4 text-xs sm:text-sm text-emerald-100 font-serif italic leading-relaxed text-center">
+        <p>
+          «Madre de la vida, en tu seno materno se fue formando Jesús, que es el Señor de todo lo que existe. Resucitado, Él te transformó con su luz y te hizo reina de toda la creación. Por eso te pedimos que reines, María, en el corazón palpitante de la Amazonia.»
+        </p>
+        <p>
+          «Muéstrate como madre de todas las creaturas, en la belleza de las flores, de los ríos, del gran río que la atraviesa y de todo lo que vibra en sus selvas. Cuida con tu cariño esa explosión de hermosura.»
+        </p>
+        <p>
+          «Pide a Jesús que derrame todo su amor en los hombres y en las mujeres que allí habitan, para que sepan admirarla y cuidarla. Haz nacer a tu hijo en sus corazones...»
+        </p>
+        <p>
+          «Madre, mira a los pobres de la Amazonia, porque su hogar está siendo destruido por intereses mezquinos. ¡Cuánto dolor y cuánta miseria, cuánto abandono y cuánto atropello en esta tierra bendita, desbordante de vida!»
+        </p>
+        <p>
+          «Toca la sensibilidad de los poderosos porque aunque sentimos que ya es tarde nos llamas a salvar lo que todavía vive... Reina para que nadie más se sienta dueño de la obra de Dios. En ti confiamos, Madre de la vida, no nos abandones en esta hora oscura. Amén.»
+        </p>
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-emerald-800/60 text-center">
+        <button onclick="cerrarOracionModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-6 py-2.5 rounded-xl text-xs transition">
+          Cerrar Plegaria
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#051c14] text-white py-12 border-t border-emerald-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+        <div>
+          <span class="text-base font-bold font-serif text-white block">Proyecto Humanística IV</span>
+          <span class="text-xs text-emerald-400/80">Exhortación Apostólica Postsinodal «Querida Amazonia» (Papa Francisco, 2020)</span>
+          <p class="text-xs text-slate-400 mt-1">Stand educativo e interactivo orientado a la comunidad universitaria y público en general.</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-3 bg-emerald-900/60 hover:bg-emerald-800 text-emerald-200 rounded-xl transition border border-emerald-700/40" title="Subir al inicio">
+            <i data-lucide="arrow-up" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-emerald-900/50 flex flex-col sm:flex-row items-center justify-between text-xs text-emerald-300/60 gap-4">
+        <span>© 2026 Stand Humanística IV • Proyecto Académico</span>
+        <span>Desarrollado para exposición, interacción y difusión pedagógica.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
