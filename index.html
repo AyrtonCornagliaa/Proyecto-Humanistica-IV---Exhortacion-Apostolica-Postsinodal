@@ -2,7 +2,8 @@
 <html lang="es" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#062319">
   <title>Exhortación Apostólica Postsinodal «Querida Amazonia» | Stand Humanística IV</title>
   <meta name="description" content="Portal interactivo e informativo sobre la Exhortación Apostólica Postsinodal 'Querida Amazonia' del Papa Francisco. Proyecto Académico Humanística IV.">
   
@@ -66,17 +67,16 @@
   <!-- NAVBAR -->
   <nav class="sticky top-0 z-50 bg-[#062319]/90 backdrop-blur-md border-b border-emerald-900/40 text-white transition-all duration-300" id="navbar">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
+      <div class="flex items-center justify-between h-16 sm:h-20 gap-2">
         <!-- Logo / Titulo -->
-        <a href="#inicio" class="flex items-center gap-3 group">
-          <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-amber-500 flex items-center justify-center shadow-lg shadow-emerald-950/40 group-hover:scale-105 transition-transform">
-            <i data-lucide="book-open-check" class="w-6 h-6 text-white"></i>
+        <a href="#inicio" class="flex items-center gap-2.5 sm:gap-3 group min-w-0">
+          <div class="w-9 h-9 sm:w-11 sm:h-11 flex-shrink-0 rounded-xl bg-gradient-to-br from-emerald-500 to-amber-500 flex items-center justify-center shadow-lg shadow-emerald-950/40 group-hover:scale-105 transition-transform">
+            <i data-lucide="book-open-check" class="w-5 h-5 sm:w-6 sm:h-6 text-white"></i>
           </div>
-          <div>
-            <span class="text-xs uppercase tracking-widest text-emerald-400 font-semibold block">Stand Humanística IV</span>
-            <span class="text-lg sm:text-xl font-bold font-serif text-white tracking-wide flex items-center gap-1.5">
+          <div class="min-w-0">
+            <span class="text-[10px] sm:text-xs uppercase tracking-widest text-emerald-400 font-semibold block truncate">Stand Humanística IV</span>
+            <span class="text-base sm:text-xl font-bold font-serif text-white tracking-wide flex items-center gap-1.5 whitespace-nowrap">
               Querida Amazonia
-              <span class="text-xs bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded-full font-sans font-medium">Exhortación</span>
             </span>
           </div>
         </a>
@@ -94,10 +94,14 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex items-center gap-2 sm:gap-3">
-          <button onclick="abrirModalQR()" class="btn-shimmer flex items-center gap-2 bg-gradient-to-r from-emerald-600/30 to-teal-600/30 hover:from-emerald-500/50 hover:to-teal-500/50 border border-emerald-400/40 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-emerald-200 hover:text-white transition shadow-lg shadow-emerald-950/30" title="Compartir en tu celular con Código QR">
+        <div class="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
+          <button onclick="toggleResumenModal()" class="hidden lg:flex items-center gap-2 bg-amber-500/15 hover:bg-amber-500/30 border border-amber-400/40 px-3 py-2 rounded-xl text-sm font-semibold text-amber-200 transition" title="Ver resumen analítico">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+            <span>Resumen</span>
+          </button>
+          <button onclick="abrirModalQR()" class="btn-shimmer flex items-center gap-2 bg-gradient-to-r from-emerald-600/30 to-teal-600/30 hover:from-emerald-500/50 hover:to-teal-500/50 border border-emerald-400/40 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-emerald-200 hover:text-white transition shadow-lg shadow-emerald-950/30" title="Compartir en tu celular con Código QR" aria-label="Escanear QR">
             <i data-lucide="qr-code" class="w-4 h-4 text-emerald-300"></i>
-            <span>Escanear QR</span>
+            <span class="hidden sm:inline">Escanear QR</span>
           </button>
 
           <!-- Mobile Menu Button -->
@@ -117,12 +121,16 @@
       <a href="#maria" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-emerald-100 hover:bg-emerald-800/40">Madre de la Amazonia</a>
       <a href="#trivia" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-amber-300 font-medium hover:bg-amber-500/20">Trivia Interactiva del Stand</a>
       <a href="#compromiso" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-emerald-100 hover:bg-emerald-800/40">Muro de Compromisos</a>
+      <button onclick="toggleMobileMenu(); toggleResumenModal()" class="block w-full text-left px-3 py-2 rounded-lg text-amber-300 font-medium hover:bg-amber-500/20">Resumen Analítico (imprimir / PDF)</button>
     </div>
+    <!-- Barra de progreso de lectura -->
+    <div id="scrollProgress" class="absolute bottom-0 left-0 h-[3px] w-0 bg-gradient-to-r from-emerald-400 via-amber-400 to-emerald-400"></div>
   </nav>
 
   <!-- HERO SECTION -->
-  <header id="inicio" class="relative overflow-hidden bg-gradient-to-b from-[#062319] via-[#093527] to-[#0a3325] text-white pt-12 pb-24 lg:pt-20 lg:pb-32">
+  <header id="inicio" class="relative overflow-hidden bg-gradient-to-b from-[#062319] via-[#093527] to-[#0a3325] text-white pt-8 pb-16 sm:pt-12 sm:pb-24 lg:pt-20 lg:pb-32">
     <!-- Luces vivas / Luciérnagas amazónicas (Generadas dinámicamente) -->
+    <div class="hero-aurora"></div>
     <div id="firefliesContainer" class="absolute inset-0 pointer-events-none overflow-hidden z-0"></div>
 
     <!-- Background Decorators -->
@@ -136,15 +144,15 @@
         <!-- Left Column -->
         <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
           
-          <div class="inline-flex items-center gap-2 bg-emerald-500/15 border border-emerald-400/40 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold text-emerald-300 backdrop-blur-md shadow-lg shadow-emerald-950/50">
+          <div class="inline-flex max-w-full items-center justify-center gap-2 bg-emerald-500/15 border border-emerald-400/40 px-3 sm:px-4 py-1.5 rounded-full text-[11px] sm:text-sm font-semibold text-emerald-300 backdrop-blur-md shadow-lg shadow-emerald-950/50">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
             <i data-lucide="feather" class="w-4 h-4 text-amber-400"></i>
             <span>Documento Magisterial del Papa Francisco • Febrero 2020</span>
           </div>
 
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-serif tracking-tight leading-[1.15]">
+          <h1 class="text-[2rem] leading-tight sm:text-5xl lg:text-6xl font-extrabold font-serif tracking-tight leading-[1.15]">
             Exhortación Apostólica Postsinodal <br class="hidden sm:inline">
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-200 to-amber-300 glow-text-emerald">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-200 to-amber-300 glow-text-emerald title-shine">
               «Querida Amazonia»
             </span>
           </h1>
@@ -197,7 +205,7 @@
         <div class="lg:col-span-5 relative">
           <div class="relative mx-auto max-w-md bg-gradient-to-b from-white/10 to-white/5 p-6 sm:p-7 rounded-3xl border border-white/20 backdrop-blur-2xl shadow-2xl shadow-emerald-950/70 glow-border">
             
-            <div class="absolute -top-3.5 -right-3.5 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-xs font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-wider flex items-center gap-1.5">
+            <div class="absolute -top-3.5 right-2 sm:-right-3.5 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-xs font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-wider flex items-center gap-1.5">
               <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Toca cada sueño
             </div>
 
@@ -288,7 +296,7 @@
   </header>
 
   <!-- SECTION: ¿QUÉ ES UNA EXHORTACIÓN APOSTÓLICA POSTSINODAL? (Claridad conceptual para el stand) -->
-  <section id="que-es" class="py-20 bg-white border-b border-slate-200">
+  <section id="que-es" class="py-14 sm:py-20 bg-white border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-3xl mx-auto mb-16">
@@ -351,7 +359,7 @@
       </div>
 
       <!-- Infografía interactiva del Proceso -->
-      <div class="bg-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
+      <div class="bg-slate-900 text-white rounded-3xl p-5 sm:p-12 shadow-xl relative overflow-hidden">
         <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
         <div class="max-w-3xl mb-8">
@@ -406,7 +414,7 @@
   </section>
 
   <!-- SECTION: CONTEXTO GEOGRÁFICO Y HUMANO (El Bioma Amazónico) -->
-  <section id="contexto" class="py-20 bg-gradient-to-b from-[#edf6f2] to-white border-b border-slate-200">
+  <section id="contexto" class="py-14 sm:py-20 bg-gradient-to-b from-[#edf6f2] to-white border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -512,7 +520,7 @@
   </section>
 
   <!-- SECTION: LOS CUATRO GRANDES SUEÑOS (NÚCLEO PRINCIPAL) -->
-  <section id="suenos" class="py-24 bg-[#0a2f22] text-white relative">
+  <section id="suenos" class="py-16 sm:py-24 bg-[#0a2f22] text-white relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-3xl mx-auto mb-16">
@@ -528,20 +536,20 @@
       </div>
 
       <!-- Interactive Dream Switcher Tabs -->
-      <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-12" id="dreamTabs">
-        <button onclick="cambiarSueno('social')" id="tab-social" class="sueno-tab active px-5 py-3 rounded-2xl font-semibold text-sm transition flex items-center gap-2.5 bg-blue-600 text-white shadow-lg shadow-blue-900/50">
+      <div class="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-2 sm:gap-4 mb-10 sm:mb-12" id="dreamTabs">
+        <button onclick="cambiarSueno('social')" id="tab-social" class="sueno-tab active px-3 sm:px-5 py-3 rounded-2xl font-semibold text-xs sm:text-sm transition flex items-center justify-center gap-2 sm:gap-2.5 bg-blue-600 text-white shadow-lg shadow-blue-900/50">
           <i data-lucide="shield-alert" class="w-4 h-4"></i>
           <span>1. Sueño Social</span>
         </button>
-        <button onclick="cambiarSueno('cultural')" id="tab-cultural" class="sueno-tab px-5 py-3 rounded-2xl font-semibold text-sm transition flex items-center gap-2.5 bg-white/10 hover:bg-white/15 text-slate-300 border border-white/10">
+        <button onclick="cambiarSueno('cultural')" id="tab-cultural" class="sueno-tab px-3 sm:px-5 py-3 rounded-2xl font-semibold text-xs sm:text-sm transition flex items-center justify-center gap-2 sm:gap-2.5 bg-white/10 hover:bg-white/15 text-slate-300 border border-white/10">
           <i data-lucide="palette" class="w-4 h-4"></i>
           <span>2. Sueño Cultural</span>
         </button>
-        <button onclick="cambiarSueno('ecologico')" id="tab-ecologico" class="sueno-tab px-5 py-3 rounded-2xl font-semibold text-sm transition flex items-center gap-2.5 bg-white/10 hover:bg-white/15 text-slate-300 border border-white/10">
+        <button onclick="cambiarSueno('ecologico')" id="tab-ecologico" class="sueno-tab px-3 sm:px-5 py-3 rounded-2xl font-semibold text-xs sm:text-sm transition flex items-center justify-center gap-2 sm:gap-2.5 bg-white/10 hover:bg-white/15 text-slate-300 border border-white/10">
           <i data-lucide="sprout" class="w-4 h-4"></i>
           <span>3. Sueño Ecológico</span>
         </button>
-        <button onclick="cambiarSueno('eclesial')" id="tab-eclesial" class="sueno-tab px-5 py-3 rounded-2xl font-semibold text-sm transition flex items-center gap-2.5 bg-white/10 hover:bg-white/15 text-slate-300 border border-white/10">
+        <button onclick="cambiarSueno('eclesial')" id="tab-eclesial" class="sueno-tab px-3 sm:px-5 py-3 rounded-2xl font-semibold text-xs sm:text-sm transition flex items-center justify-center gap-2 sm:gap-2.5 bg-white/10 hover:bg-white/15 text-slate-300 border border-white/10">
           <i data-lucide="church" class="w-4 h-4"></i>
           <span>4. Sueño Eclesial</span>
         </button>
@@ -564,7 +572,7 @@
               </p>
             </div>
             
-            <div class="bg-blue-950/60 border border-blue-500/30 p-4 rounded-2xl text-center min-w-[200px] flex-shrink-0">
+            <div class="bg-blue-950/60 border border-blue-500/30 p-4 rounded-2xl text-center w-full lg:w-auto lg:min-w-[200px] flex-shrink-0">
               <span class="text-xs text-blue-300 block font-medium">Clave Sinodal</span>
               <span class="text-lg font-bold text-white">«Injusticia y Crimen»</span>
               <span class="text-xs text-slate-400 block mt-1">Llamar a las cosas por su nombre</span>
@@ -645,7 +653,7 @@
               </p>
             </div>
             
-            <div class="bg-amber-950/60 border border-amber-500/30 p-4 rounded-2xl text-center min-w-[200px] flex-shrink-0">
+            <div class="bg-amber-950/60 border border-amber-500/30 p-4 rounded-2xl text-center w-full lg:w-auto lg:min-w-[200px] flex-shrink-0">
               <span class="text-xs text-amber-300 block font-medium">Clave Sinodal</span>
               <span class="text-lg font-bold text-white">«Cultivar sin Desarraigar»</span>
               <span class="text-xs text-slate-400 block mt-1">Contra la colonización cultural</span>
@@ -726,7 +734,7 @@
               </p>
             </div>
             
-            <div class="bg-emerald-950/60 border border-emerald-500/30 p-4 rounded-2xl text-center min-w-[200px] flex-shrink-0">
+            <div class="bg-emerald-950/60 border border-emerald-500/30 p-4 rounded-2xl text-center w-full lg:w-auto lg:min-w-[200px] flex-shrink-0">
               <span class="text-xs text-emerald-300 block font-medium">Clave Sinodal</span>
               <span class="text-lg font-bold text-white">«Todo está conectado»</span>
               <span class="text-xs text-slate-400 block mt-1">El agua como arteria vital</span>
@@ -807,7 +815,7 @@
               </p>
             </div>
             
-            <div class="bg-purple-950/60 border border-purple-500/30 p-4 rounded-2xl text-center min-w-[200px] flex-shrink-0">
+            <div class="bg-purple-950/60 border border-purple-500/30 p-4 rounded-2xl text-center w-full lg:w-auto lg:min-w-[200px] flex-shrink-0">
               <span class="text-xs text-purple-300 block font-medium">Clave Sinodal</span>
               <span class="text-lg font-bold text-white">«Inculturación Viva»</span>
               <span class="text-xs text-slate-400 block mt-1">La fuerza de las mujeres</span>
@@ -875,7 +883,7 @@
   </section>
 
   <!-- SECTION: POESÍA Y VOCES AMAZÓNICAS (El Alma Sensible del Documento) -->
-  <section id="poesia" class="py-20 bg-white border-b border-slate-200">
+  <section id="poesia" class="py-14 sm:py-20 bg-white border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-3xl mx-auto mb-16">
@@ -956,10 +964,10 @@
   </section>
 
   <!-- SECTION: MADRE DE LA AMAZONIA (CONCLUSIÓN MARIANA) -->
-  <section id="maria" class="py-20 bg-gradient-to-b from-white to-[#edf6f2]">
+  <section id="maria" class="py-14 sm:py-20 bg-gradient-to-b from-white to-[#edf6f2]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="bg-gradient-to-br from-[#062319] via-[#093527] to-[#0d4432] rounded-3xl p-8 sm:p-12 lg:p-16 text-white shadow-2xl relative overflow-hidden border border-emerald-500/30">
+      <div class="bg-gradient-to-br from-[#062319] via-[#093527] to-[#0d4432] rounded-3xl p-6 sm:p-12 lg:p-16 text-white shadow-2xl relative overflow-hidden border border-emerald-500/30">
         
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           
@@ -1004,7 +1012,7 @@
 
           <div class="lg:col-span-5 flex justify-center">
             <div class="w-full max-w-sm bg-white/5 p-6 rounded-3xl border border-white/10 backdrop-blur-md text-center">
-              <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 text-slate-950 flex items-center justify-center mb-4 shadow-xl">
+              <div class="w-20 h-20 mx-auto rounded-full sun-pulse bg-gradient-to-tr from-amber-400 to-amber-200 text-slate-950 flex items-center justify-center mb-4 shadow-xl">
                 <i data-lucide="sun" class="w-10 h-10 text-amber-900"></i>
               </div>
               <h3 class="font-serif text-xl font-bold text-white">Llamado al Compromiso</h3>
@@ -1026,7 +1034,7 @@
   </section>
 
   <!-- SECTION: TRIVIA INTERACTIVA PARA EL VISITANTE DEL STAND -->
-  <section id="trivia" class="py-24 bg-white border-b border-slate-200">
+  <section id="trivia" class="py-16 sm:py-24 bg-white border-b border-slate-200">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center mb-12">
@@ -1083,7 +1091,7 @@
   </section>
 
   <!-- SECTION: MURO DE COMPROMISOS / REFLEXIÓN DEL VISITANTE -->
-  <section id="compromiso" class="py-20 bg-gradient-to-b from-[#edf6f2] to-white border-b border-slate-200">
+  <section id="compromiso" class="py-14 sm:py-20 bg-gradient-to-b from-[#edf6f2] to-white border-b border-slate-200">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-2xl mx-auto mb-12">
@@ -1142,8 +1150,8 @@
   </section>
 
   <!-- MODAL: DETALLE DEL SUEÑO (ABIERTO DESDE GUÍA RÁPIDA - IDÉNTICO A ESCANEAR QR) -->
-  <div id="modalSuenoDetalle" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-slate-200 animate-in fade-in zoom-in duration-200">
+  <div id="modalSuenoDetalle" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-slate-200 modal-pop my-auto">
       
       <button onclick="cerrarModalSueno()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 p-2 rounded-full hover:bg-slate-100 transition" title="Cerrar ventana">
         <i data-lucide="x" class="w-5 h-5"></i>
@@ -1185,8 +1193,8 @@
   </div>
 
   <!-- MODAL: CÓDIGO QR PARA ESCANEAR EN EL STAND -->
-  <div id="modalQR" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl relative text-center border border-slate-200 animate-in fade-in zoom-in duration-200">
+  <div id="modalQR" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl relative text-center border border-slate-200 modal-pop my-auto">
       
       <button onclick="cerrarModalQR()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 p-2 rounded-full hover:bg-slate-100">
         <i data-lucide="x" class="w-5 h-5"></i>
@@ -1208,8 +1216,8 @@
   </div>
 
   <!-- MODAL: RESUMEN ANALÍTICO COMPLETO (PDF SINTETIZADO) -->
-  <div id="modalResumen" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl relative border border-slate-200 animate-in fade-in zoom-in duration-200">
+  <div id="modalResumen" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl relative border border-slate-200 modal-pop my-auto">
       
       <!-- Header -->
       <div class="p-6 border-b border-slate-200 flex items-center justify-between bg-[#f8faf9] rounded-t-3xl">
@@ -1309,8 +1317,8 @@
   </div>
 
   <!-- MODAL: ORACIÓN COMPLETA A MARÍA -->
-  <div id="modalOracion" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-gradient-to-b from-[#062319] to-[#0a3526] text-white rounded-3xl max-w-lg w-full p-8 shadow-2xl relative border border-emerald-500/40 animate-in fade-in zoom-in duration-200">
+  <div id="modalOracion" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-gradient-to-b from-[#062319] to-[#0a3526] text-white rounded-3xl max-w-lg w-full p-8 shadow-2xl relative border border-emerald-500/40 modal-pop my-auto">
       
       <button onclick="cerrarOracionModal()" class="absolute top-4 right-4 text-emerald-300 hover:text-white p-2 rounded-full hover:bg-emerald-800/40">
         <i data-lucide="x" class="w-5 h-5"></i>
@@ -1371,6 +1379,12 @@
       </div>
     </div>
   </footer>
+
+  <!-- Resplandor del cursor y botón volver arriba -->
+  <div id="cursorGlow" aria-hidden="true"></div>
+  <button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Volver arriba">
+    <i data-lucide="chevron-up" class="w-5 h-5"></i>
+  </button>
 
   <script src="app.js"></script>
 </body>

@@ -204,7 +204,7 @@ function cambiarSueno(suenoKey) {
   // Resetear estilos de todos los tabs
   const tabs = document.querySelectorAll('.sueno-tab');
   tabs.forEach(t => {
-    t.className = 'sueno-tab px-5 py-3 rounded-2xl font-semibold text-sm transition flex items-center gap-2.5 bg-white/10 hover:bg-white/15 text-slate-300 border border-white/10';
+    t.className = 'sueno-tab px-3 sm:px-5 py-3 rounded-2xl font-semibold text-xs sm:text-sm transition flex items-center justify-center gap-2 sm:gap-2.5 bg-white/10 hover:bg-white/15 text-slate-300 border border-white/10';
   });
 
   // Activar el seleccionado
@@ -214,7 +214,7 @@ function cambiarSueno(suenoKey) {
     const contentEl = document.getElementById(elegido.contentId);
     
     if (tabEl) {
-      tabEl.className = `sueno-tab active px-5 py-3 rounded-2xl font-semibold text-sm transition flex items-center gap-2.5 ${elegido.colorTab}`;
+      tabEl.className = `sueno-tab active px-3 sm:px-5 py-3 rounded-2xl font-semibold text-xs sm:text-sm transition flex items-center justify-center gap-2 sm:gap-2.5 ${elegido.colorTab}`;
     }
     if (contentEl) {
       contentEl.classList.remove('hidden');
@@ -366,7 +366,7 @@ function responderTrivia(opcionSeleccionada, btnElement) {
     }
   } else {
     btnElement.classList.remove('bg-white', 'border-slate-200');
-    btnElement.classList.add('bg-rose-100', 'border-rose-400', 'text-rose-950');
+    btnElement.classList.add('bg-rose-100', 'border-rose-400', 'text-rose-950', 'shake');
     feedbackEl.className = 'p-4 rounded-2xl mb-6 text-sm bg-amber-100 text-amber-900 border border-amber-300 block animate-in fade-in';
     feedbackEl.innerHTML = `<strong>Casi:</strong> La opción correcta era la indicada en verde. ${q.explicacion}`;
   }
@@ -704,3 +704,212 @@ window.addEventListener('resize', () => {
   crearLuciernagas();
 });
 
+
+// ======================================================
+// MEJORAS v2: EFECTOS + EXPERIENCIA MÓVIL
+// ======================================================
+(function () {
+  const reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const esTactil = window.matchMedia('(hover: none)').matches;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    iniciarReveal();
+    iniciarContadores();
+    iniciarBarraProgreso();
+    iniciarNavActiva();
+    iniciarHojas();
+    iniciarTilt();
+    iniciarCursorGlow();
+    iniciarCierreConEscape();
+  });
+
+  // --- Aparición suave al hacer scroll ---
+  function iniciarReveal() {
+    const grupos = [
+      ['#que-es .grid > div', 'reveal'],
+      ['#que-es .bg-slate-900', 'reveal reveal-zoom'],
+      ['#contexto .lg\\:col-span-6:first-child', 'reveal reveal-left'],
+      ['#contexto .lg\\:col-span-6:last-child', 'reveal reveal-right'],
+      ['#suenos .text-center', 'reveal'],
+      ['#poesia .text-center', 'reveal'],
+      ['#poesia .grid > div', 'reveal'],
+      ['#maria .grid > div', 'reveal'],
+      ['#trivia .text-center', 'reveal'],
+      ['#triviaContainer', 'reveal reveal-zoom'],
+      ['#compromiso .text-center', 'reveal'],
+      ['#compromiso .grid > div', 'reveal'],
+      ['footer .max-w-7xl', 'reveal']
+    ];
+    const elementos = [];
+    grupos.forEach(([sel, clases]) => {
+      document.querySelectorAll(sel).forEach((el, i) => {
+        el.classList.add(...clases.split(' '));
+        el.style.setProperty('--reveal-delay', `${Math.min(i, 5) * 110}ms`);
+        elementos.push(el);
+      });
+    });
+    if (reducido || !('IntersectionObserver' in window)) {
+      elementos.forEach(el => el.classList.add('is-visible'));
+      return;
+    }
+    const obs = new IntersectionObserver((entradas) => {
+      entradas.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    elementos.forEach(el => obs.observe(el));
+    // Red de seguridad: si algo no se activó, mostrarlo igual
+    setTimeout(() => elementos.forEach(el => el.classList.add('is-visible')), 6000);
+  }
+
+  // --- Contadores animados en el hero ---
+  function iniciarContadores() {
+    const numeros = document.querySelectorAll('header .grid .font-serif.text-amber-400');
+    numeros.forEach(el => {
+      const original = el.textContent.trim();
+      const m = original.match(/^(\+?)(\d+)$/);
+      if (!m) return;
+      const prefijo = m[1];
+      const meta = parseInt(m[2], 10);
+      if (reducido) return;
+      el.textContent = prefijo + '0';
+      const dur = 1600;
+      const inicio = performance.now() + 400;
+      function paso(t) {
+        const p = Math.min(Math.max((t - inicio) / dur, 0), 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        el.textContent = prefijo + Math.round(meta * ease);
+        if (p < 1) requestAnimationFrame(paso);
+        else el.textContent = original;
+      }
+      requestAnimationFrame(paso);
+    });
+  }
+
+  // --- Barra de progreso + botón "volver arriba" ---
+  function iniciarBarraProgreso() {
+    const barra = document.getElementById('scrollProgress');
+    const btn = document.getElementById('backToTop');
+    const hero = document.getElementById('inicio');
+    let pendiente = false;
+    function actualizar() {
+      pendiente = false;
+      const y = window.scrollY || document.documentElement.scrollTop;
+      const alto = document.documentElement.scrollHeight - window.innerHeight;
+      if (barra) barra.style.width = (alto > 0 ? (y / alto) * 100 : 0) + '%';
+      if (btn) btn.classList.toggle('show', y > 600);
+      // Parallax suave del fondo del hero (solo escritorio)
+      if (hero && !reducido && !esTactil && y < window.innerHeight * 1.5) {
+        const aurora = hero.querySelector('.hero-aurora');
+        if (aurora) aurora.style.marginTop = (y * 0.12) + 'px';
+      }
+    }
+    window.addEventListener('scroll', () => {
+      if (!pendiente) { pendiente = true; requestAnimationFrame(actualizar); }
+    }, { passive: true });
+    actualizar();
+  }
+
+  // --- Resaltar la sección actual en el menú ---
+  function iniciarNavActiva() {
+    const links = document.querySelectorAll('#navbar .hidden.md\\:flex a[href^="#"]');
+    const mapa = new Map();
+    links.forEach(a => {
+      const sec = document.querySelector(a.getAttribute('href'));
+      if (sec) mapa.set(sec, a);
+    });
+    if (!('IntersectionObserver' in window)) return;
+    const obs = new IntersectionObserver((entradas) => {
+      entradas.forEach(e => {
+        if (e.isIntersecting) {
+          links.forEach(l => l.classList.remove('nav-active'));
+          const a = mapa.get(e.target);
+          if (a) a.classList.add('nav-active');
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    mapa.forEach((_, sec) => obs.observe(sec));
+  }
+
+  // --- Hojas que caen en el hero ---
+  function iniciarHojas() {
+    if (reducido) return;
+    const hero = document.getElementById('inicio');
+    if (!hero) return;
+    const cont = document.createElement('div');
+    cont.className = 'absolute inset-0 pointer-events-none overflow-hidden z-0';
+    cont.setAttribute('aria-hidden', 'true');
+    const simbolos = ['🍃', '🌿', '🍂'];
+    const cantidad = window.innerWidth < 640 ? 6 : 12;
+    for (let i = 0; i < cantidad; i++) {
+      const hoja = document.createElement('span');
+      hoja.className = 'leaf';
+      hoja.textContent = simbolos[i % simbolos.length];
+      hoja.style.left = (Math.random() * 100) + '%';
+      hoja.style.fontSize = (14 + Math.random() * 14) + 'px';
+      hoja.style.animationDuration = (9 + Math.random() * 9) + 's';
+      hoja.style.animationDelay = (Math.random() * 12) + 's';
+      cont.appendChild(hoja);
+    }
+    hero.insertBefore(cont, hero.firstChild);
+  }
+
+  // --- Inclinación 3D de tarjetas (solo con mouse) ---
+  function iniciarTilt() {
+    if (reducido || esTactil) return;
+    const tarjetas = document.querySelectorAll('#poesia .card-hover-lift, #que-es .grid > div.rounded-2xl');
+    tarjetas.forEach(card => {
+      card.classList.add('tilt-card');
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `perspective(700px) rotateX(${(-y * 7).toFixed(2)}deg) rotateY(${(x * 7).toFixed(2)}deg) translateY(-4px)`;
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+  }
+
+  // --- Resplandor que sigue al cursor (solo escritorio) ---
+  function iniciarCursorGlow() {
+    const glow = document.getElementById('cursorGlow');
+    if (!glow || reducido || esTactil) { if (glow) glow.remove(); return; }
+    window.addEventListener('mousemove', (e) => {
+      glow.style.opacity = '1';
+      glow.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+    }, { passive: true });
+    document.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+  }
+
+  // --- Cerrar modales con la tecla Escape ---
+  function iniciarCierreConEscape() {
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      const abierto = id => { const m = document.getElementById(id); return m && !m.classList.contains('hidden'); };
+      if (abierto('modalQR')) cerrarModalQR();
+      if (abierto('modalSuenoDetalle')) cerrarModalSueno();
+      if (abierto('modalOracion')) cerrarOracionModal();
+      if (abierto('modalResumen')) toggleResumenModal();
+    });
+  }
+
+  // --- Bloquear el scroll del fondo cuando hay un modal abierto ---
+  const idsModales = ['modalQR', 'modalSuenoDetalle', 'modalOracion', 'modalResumen'];
+  function sincronizarScroll() {
+    const hayAbierto = idsModales.some(id => {
+      const m = document.getElementById(id);
+      return m && !m.classList.contains('hidden');
+    });
+    document.body.style.overflow = hayAbierto ? 'hidden' : '';
+    if (!hayAbierto) document.body.style.overflowX = 'hidden';
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    idsModales.forEach(id => {
+      const m = document.getElementById(id);
+      if (m) new MutationObserver(sincronizarScroll).observe(m, { attributes: true, attributeFilter: ['class'] });
+    });
+  });
+})();
